@@ -1,6 +1,8 @@
-#pragma once
-#include "GameEngine.h"
+#ifndef PLAYER_H
+#define PLAYER_H
 
+#include "TextureManager.h"
+                                                            
 
 class PlayerShape {
 
@@ -21,3 +23,4 @@ class PlayerShape {
 
 		//ADD STATES
 };
+#endif
