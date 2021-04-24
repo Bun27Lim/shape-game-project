@@ -15,9 +15,11 @@ class GameEngine {
 
 		bool isRunning();
 
+		static SDL_Renderer* Game_Renderer;
+
+
 	private:
 		SDL_Window* Game_Window;
-		SDL_Renderer* Game_Renderer;
 
 		bool Running;
 };
