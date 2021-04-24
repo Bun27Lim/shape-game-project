@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 	int frameTime;
 
 	my_game = new GameEngine();
-	my_game->SDL_init("Game Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT);
+	my_game->SDL_init("Polypals", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	while (my_game->isRunning()) {
 

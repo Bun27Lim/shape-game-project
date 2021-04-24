@@ -1,9 +1,12 @@
 #ifndef GE_H
 #define GE_H
-#include "SDL.h"
+
+#include "PlayerShape.h"
+#include "GameObject.h"
+#include "Accuracy.h"
 
 class GameEngine {
-
+                                                 
 	public:
 		GameEngine();
 		~GameEngine();
@@ -16,7 +19,7 @@ class GameEngine {
 
 		bool isRunning();
 
-		static SDL_Renderer* Game_Renderer;
+		SDL_Renderer* Game_Renderer;
 
 
 	private:

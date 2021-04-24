@@ -9,6 +9,9 @@ PlayerShape::PlayerShape(const char* textureFile, int initX, int initY) {
 
 }
 
+PlayerShape::~PlayerShape() {}
+
+
 void PlayerShape::HandleEvents() {
 	//SDL EVENT stuff here
 }
