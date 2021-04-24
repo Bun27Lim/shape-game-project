@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GE_H
+#define GE_H
 #include "SDL.h"
 
 class GameEngine {
@@ -23,3 +24,4 @@ class GameEngine {
 
 		bool Running;
 };
+#endif
