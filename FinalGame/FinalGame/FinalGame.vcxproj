@@ -149,19 +149,11 @@
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="main.cpp" />
-<<<<<<< Updated upstream
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="TextureManager.h" />
-=======
-    <ClCompile Include="PlayerShape.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GameEngine.h" />
-    <ClInclude Include="PlayerShape.h" />
->>>>>>> Stashed changes
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
