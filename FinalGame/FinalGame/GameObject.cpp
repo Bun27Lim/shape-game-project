@@ -26,8 +26,6 @@ GameObject::~GameObject()
 //********************
 void GameObject::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h) {
 	
-
-
 	int obj_size = 64;
 
 	x_pos = start_x;
@@ -44,6 +42,8 @@ void GameObject::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, i
 	src_rect.y = 0;
 	src_rect.w = height;
 	src_rect.h = width;
+
+	texture = TextureManager::LoadTexture(graphic, ren);
 
 	obj_update();
 }
@@ -119,10 +119,8 @@ int GameObject::obj_get_w()
 // Render Object to screen *
 //**************************
 void GameObject::obj_render(SDL_Renderer* ren)
-{
-
-	
-
+{	
+	TextureManager::Render(ren, texture, src_rect, obj_rect);
 }
 
 //*****************

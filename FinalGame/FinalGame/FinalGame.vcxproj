@@ -162,7 +162,14 @@
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="PlayerShape.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TextureManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Polypals.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\diana.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

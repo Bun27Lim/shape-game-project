@@ -33,6 +33,8 @@ protected:
 	//Sprite* obj_sprite;
 	TextureManager* image;
 
+	SDL_Texture* texture;
+
 	SDL_Rect obj_rect;
 	SDL_Rect src_rect;	
 
