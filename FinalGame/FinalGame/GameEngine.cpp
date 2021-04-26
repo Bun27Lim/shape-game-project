@@ -1,6 +1,8 @@
 #include "GameEngine.h"
 #include <iostream>
 
+GameObject PlayerObject;
+
 GameEngine::GameEngine(){}
 GameEngine::~GameEngine(){}
 
@@ -11,10 +13,17 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		Game_Window = SDL_CreateWindow(title, x, y, width, height, 0);
 		Game_Renderer = SDL_CreateRenderer(Game_Window, -1, 0);
 
+		//Create Player Object
+
+
 		//Testing white screen
 		SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
 
 		Running = true;
+
+
+
+
 	}
 	else {
 		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
