@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\vclib\SDL2-2.0.14\include;C:\Users\Blazi\Desktop\Game\cpsc-4160-final-project\SDL2_image-devel\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vclib\SDL2-2.0.14\lib\x64;C:\Users\Blazi\Desktop\Game\cpsc-4160-final-project\SDL2_image-devel\SDL2_image-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\vclib\SDL2_image-2.0.5\include;C:\vclib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vclib\SDL2_image-2.0.5\lib\x64;C:\vclib\SDL2-2.0.14\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -162,7 +162,14 @@
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="PlayerShape.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TextureManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Polypals.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\diana.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
