@@ -14,6 +14,10 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		Game_Window = SDL_CreateWindow(title, x, y, width, height, 0);
 		Game_Renderer = SDL_CreateRenderer(Game_Window, -1, 0);
 
+		//Initialize background
+		background = new BGLayer;
+		background->bg_init("images/background.png", Game_Renderer, 0, 0, 3496, 2362);
+
 		//Initialize Player Object
 		PlayerObject = new GameObject;
 		PlayerObject->obj_init("images/diana.png", Game_Renderer, 30, 30, 400, 400, 0);
@@ -80,7 +84,9 @@ void GameEngine::HandleEvents() {
 				break;
 
 			case SDLK_SPACE:
-				endRound = true;
+				if (event.type==SDL_KEYDOWN) {
+					endRound = true;
+				}
 				break;
 
 			default:
@@ -137,6 +143,7 @@ void GameEngine::Render() {
 
 	SDL_RenderClear(Game_Renderer);
 
+	background->obj_render(Game_Renderer);
 	outline->obj_renderEx(Game_Renderer);
 	PlayerObject->obj_render(Game_Renderer);
 

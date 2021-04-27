@@ -128,14 +128,11 @@ void GameObject::obj_set_angle(double angle_in)
 
 void GameObject::obj_set_rand_pos()
 {
-	srand(time(NULL));
 	x_pos = rand() % (SCREEN_WIDTH - 2* obj_rect.w) + obj_rect.w;
 	y_pos = rand() % (SCREEN_HEIGHT - 2* obj_rect.h) + obj_rect.h;
 	angle = (rand() % 180 - 90);
 
-
-	std::cout << "angle: " << angle << std::endl;
-
+	std::cout << "x, y: " << x_pos << ", " << y_pos << std::endl;
 }
 
 //**************************

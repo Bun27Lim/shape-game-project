@@ -4,6 +4,7 @@
 #include "screenInfo.h"
 #include "PlayerShape.h"
 #include "GameObject.h"
+#include "BGLayer.h"
 #include "Accuracy.h"
 
 class GameEngine {
@@ -28,6 +29,7 @@ class GameEngine {
 
 		GameObject* PlayerObject;
 		GameObject* outline;
+		BGLayer* background;
 
 		int totalScore;
 		bool Running;
