@@ -26,7 +26,37 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		srand(time(NULL));
 		outline = new GameObject;
 		outline->obj_init("images/diana_outline.png", Game_Renderer, rand() % (SCREEN_WIDTH - 128) + 64, rand() % (SCREEN_HEIGHT - 128) + 64, 400, 400, rand() % 180 - 90);
+    
+		//Initialize Player Object Randomly
+		srand (time(NULL));
+		int pal = rand() % 5;
+		switch (pal)
+		{
+		case 0:
+			PlayerObject.obj_init("images/jeff.png", Game_Renderer, 30, 30, 400, 400);
+			break;
+		
+		case 1:
+			PlayerObject.obj_init("images/travis.png", Game_Renderer, 30, 30, 400, 400);
+			break;
 
+		case 2:
+			PlayerObject.obj_init("images/diana.png", Game_Renderer, 30, 30, 400, 400);
+			break;
+
+		case 3:
+			PlayerObject.obj_init("images/katie.png", Game_Renderer, 30, 30, 400, 400);
+			break;
+
+		case 4:
+			PlayerObject.obj_init("images/luna.png", Game_Renderer, 30, 30, 400, 400);
+			break;
+		
+		default:
+			break;
+		}
+		//PlayerObject.obj_init("images/diana.png", Game_Renderer, 30, 30, 400, 400);
+    
 		//Testing white screen
 		SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
 

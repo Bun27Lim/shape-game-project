@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "BGLayer.h"
 #include "Accuracy.h"
+#include <cstdlib>
+#include <time.h>
 
 class GameEngine {
                                                  
