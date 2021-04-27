@@ -1,6 +1,7 @@
 #ifndef GE_H
 #define GE_H
 
+#include "screenInfo.h"
 #include "PlayerShape.h"
 #include "GameObject.h"
 #include "Accuracy.h"
@@ -25,6 +26,11 @@ class GameEngine {
 	private:
 		SDL_Window* Game_Window;
 
+		GameObject* PlayerObject;
+		GameObject* outline;
+
+		int totalScore;
 		bool Running;
+		bool endRound;
 };
 #endif

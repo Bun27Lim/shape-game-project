@@ -24,7 +24,7 @@ GameObject::~GameObject()
 //********************
 // Initialize Object *
 //********************
-void GameObject::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h) {
+void GameObject::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h, double start_angle) {
 	
 	int obj_size = 64;
 
@@ -32,6 +32,7 @@ void GameObject::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, i
 	y_pos = start_y;
 	width = start_w;
 	height = start_h;
+	angle = start_angle;
 
 	obj_rect.x = start_x;
 	obj_rect.y = start_y;
@@ -115,12 +116,39 @@ int GameObject::obj_get_w()
 	return obj_rect.w;
 }
 
+double GameObject::obj_get_angle()
+{
+	return angle;
+}
+
+void GameObject::obj_set_angle(double angle_in)
+{
+	angle = angle_in;
+}
+
+void GameObject::obj_set_rand_pos()
+{
+	srand(time(NULL));
+	x_pos = rand() % (SCREEN_WIDTH - 2* obj_rect.w) + obj_rect.w;
+	y_pos = rand() % (SCREEN_HEIGHT - 2* obj_rect.h) + obj_rect.h;
+	angle = (rand() % 180 - 90);
+
+
+	std::cout << "angle: " << angle << std::endl;
+
+}
+
 //**************************
 // Render Object to screen *
 //**************************
 void GameObject::obj_render(SDL_Renderer* ren)
 {	
 	TextureManager::Render(ren, texture, src_rect, obj_rect);
+}
+
+void GameObject::obj_renderEx(SDL_Renderer* ren)
+{
+	TextureManager::RenderEx(ren, texture, src_rect, obj_rect, angle, SDL_FLIP_NONE);
 }
 
 //*****************

@@ -163,6 +163,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="PlayerShape.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="screenInfo.h" />
     <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
