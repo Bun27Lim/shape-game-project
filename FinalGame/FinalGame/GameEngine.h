@@ -4,6 +4,8 @@
 #include "PlayerShape.h"
 #include "GameObject.h"
 #include "Accuracy.h"
+#include <cstdlib>
+#include <time.h>
 
 class GameEngine {
                                                  
