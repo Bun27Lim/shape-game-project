@@ -153,6 +153,8 @@
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="PlayerShape.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
@@ -161,6 +163,8 @@
     <ClInclude Include="BGLayer.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="PlayerShape.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="screenInfo.h" />
