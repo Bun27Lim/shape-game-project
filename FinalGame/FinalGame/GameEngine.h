@@ -24,6 +24,8 @@ class GameEngine {
 
 		bool isRunning();
 
+		void ResetRound();
+
 		SDL_Renderer* Game_Renderer;
 
 
@@ -34,6 +36,9 @@ class GameEngine {
 		GameObject* outline;
 		BGLayer* background;
 		ParticleEmitter* pe;
+
+		const Uint8* keyState = SDL_GetKeyboardState(NULL);
+
 
 		int totalScore;
 		bool Running;
