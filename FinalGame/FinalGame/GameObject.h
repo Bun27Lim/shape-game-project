@@ -51,7 +51,7 @@ protected:
 	double angle;
 
 private:
-
+	int thing_this;
 
 };
 #endif
