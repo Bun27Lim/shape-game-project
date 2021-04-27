@@ -2,19 +2,15 @@
 
 #include "GameEngine.h"
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-const int FPS = 60;
-const int FRAME_DELAY = 1000 / FPS;
 
-GameEngine* my_game = nullptr;
+
 
 int main(int argc, char* argv[]) {
 
 	Uint32 frameStart;
 	int frameTime;
 
-	my_game = new GameEngine();
+	GameEngine* my_game = new GameEngine();
 	my_game->SDL_init("Polypals", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	while (my_game->isRunning()) {

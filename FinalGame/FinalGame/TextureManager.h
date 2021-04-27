@@ -10,6 +10,7 @@ class TextureManager {
 
 		static SDL_Texture* LoadTexture(const char* file, SDL_Renderer* ren);
 		static void Render(SDL_Renderer* ren, SDL_Texture* texture, SDL_Rect src, SDL_Rect dest);
+		static void RenderEx(SDL_Renderer* ren, SDL_Texture* texture, SDL_Rect src, SDL_Rect dest, double angle, SDL_RendererFlip flip);
 
 	private:
 };

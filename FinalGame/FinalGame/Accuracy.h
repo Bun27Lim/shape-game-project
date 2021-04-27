@@ -7,10 +7,9 @@
 class Accuracy
 {
 public:
-	Accuracy();
-	~Accuracy();
 
-	bool check_collision(PlayerShape*, GameObject*);
+	static bool check_collision(GameObject* player, GameObject* object);
+	static int overlap_area(GameObject* player, GameObject* object);
 };
 #endif
 
