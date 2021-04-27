@@ -20,12 +20,10 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 
 		//Initialize Player Object
 		PlayerObject = new GameObject;
-		PlayerObject->obj_init("images/diana.png", Game_Renderer, 30, 30, 400, 400, 0);
 
 		//Initialize Goal Object
 		srand(time(NULL));
 		outline = new GameObject;
-		outline->obj_init("images/diana_outline.png", Game_Renderer, rand() % (SCREEN_WIDTH - 128) + 64, rand() % (SCREEN_HEIGHT - 128) + 64, 400, 400, rand() % 180 - 90);
     
 		//Initialize Player Object Randomly
 		srand (time(NULL));
@@ -33,29 +31,33 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		switch (pal)
 		{
 		case 0:
-			PlayerObject.obj_init("images/jeff.png", Game_Renderer, 30, 30, 400, 400);
+			PlayerObject->obj_init("images/jeff.png", Game_Renderer, 30, 30, 400, 400, 0);
+			outline->obj_init("images/jeff_outline.png", Game_Renderer, rand() % (SCREEN_WIDTH - 128) + 64, rand() % (SCREEN_HEIGHT - 128) + 64, 400, 400, rand() % 180 - 90);
 			break;
 		
 		case 1:
-			PlayerObject.obj_init("images/travis.png", Game_Renderer, 30, 30, 400, 400);
+			PlayerObject->obj_init("images/travis.png", Game_Renderer, 30, 30, 400, 400, 0);
+			outline->obj_init("images/travis_outline.png", Game_Renderer, rand() % (SCREEN_WIDTH - 128) + 64, rand() % (SCREEN_HEIGHT - 128) + 64, 400, 400, rand() % 180 - 90);
 			break;
 
 		case 2:
-			PlayerObject.obj_init("images/diana.png", Game_Renderer, 30, 30, 400, 400);
+			PlayerObject->obj_init("images/diana.png", Game_Renderer, 30, 30, 400, 400, 0);
+			outline->obj_init("images/diana_outline.png", Game_Renderer, rand() % (SCREEN_WIDTH - 128) + 64, rand() % (SCREEN_HEIGHT - 128) + 64, 400, 400, rand() % 180 - 90);
 			break;
 
 		case 3:
-			PlayerObject.obj_init("images/katie.png", Game_Renderer, 30, 30, 400, 400);
+			PlayerObject->obj_init("images/katie.png", Game_Renderer, 30, 30, 400, 400, 0);
+			outline->obj_init("images/katie_outline.png", Game_Renderer, rand() % (SCREEN_WIDTH - 128) + 64, rand() % (SCREEN_HEIGHT - 128) + 64, 400, 400, rand() % 180 - 90);
 			break;
 
 		case 4:
-			PlayerObject.obj_init("images/luna.png", Game_Renderer, 30, 30, 400, 400);
+			PlayerObject->obj_init("images/luna.png", Game_Renderer, 30, 30, 400, 400, 0);
+			outline->obj_init("images/luna_outline.png", Game_Renderer, rand() % (SCREEN_WIDTH - 128) + 64, rand() % (SCREEN_HEIGHT - 128) + 64, 400, 400, rand() % 180 - 90);
 			break;
 		
 		default:
 			break;
 		}
-		//PlayerObject.obj_init("images/diana.png", Game_Renderer, 30, 30, 400, 400);
     
 		//Testing white screen
 		SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
@@ -90,57 +92,66 @@ void GameEngine::HandleEvents() {
 	switch (event.key.keysym.sym) {
 
 			//Move right
-			case SDLK_d:
-			case SDLK_RIGHT:
-				PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 2);
-				break;
-			
+		case SDLK_d:
+		case SDLK_RIGHT:
+			PlayerObject->obj_set_accel_x(PlayerObject->ACCEL);
+			break;
+
 			//Move left
-			case SDLK_a:
-			case SDLK_LEFT:
-				PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 2);
-				break;
+		case SDLK_a:
+		case SDLK_LEFT:
+			PlayerObject->obj_set_accel_x(PlayerObject->ACCEL * (-1));
+			break;
 
 			//Move up (negative y direction)
-			case SDLK_w:
-			case SDLK_UP:
-				PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 2);
-				break;
+		case SDLK_w:
+		case SDLK_UP:
+			PlayerObject->obj_set_accel_y(PlayerObject->ACCEL * (-1));
+			break;
 
 			//Move down (positive y direction)
-			case SDLK_s:
-			case SDLK_DOWN:
-				PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 2);
-				break;
+		case SDLK_s:
+		case SDLK_DOWN:
+			PlayerObject->obj_set_accel_y(PlayerObject->ACCEL);
+			break;
 
-			case SDLK_SPACE:
-				if (event.type==SDL_KEYDOWN) {
-					endRound = true;
-				}
-				break;
+		case SDLK_r:
+			GameEngine::ResetRound();
+			break;
 
-			default:
-				//Slowly (sliding effect) reset y and x velocity back to 0;
-				/*if (PlayerObject.obj_get_x_vel() > 0) {
-					PlayerObject.obj_set_x_vel(PlayerObject.obj_get_x_vel() - 1);
-				}
-				if (PlayerObject.obj_get_x_vel() < 0) {
-					PlayerObject.obj_set_x_vel(PlayerObject.obj_get_x_vel() + 1);
-				}
-				if (PlayerObject.obj_get_y_vel() > 0) {
-					PlayerObject.obj_set_y_vel(PlayerObject.obj_get_y_vel() - 1);
-				}
-				if (PlayerObject.obj_get_y_vel() < 0) {
-					PlayerObject.obj_set_y_vel(PlayerObject.obj_get_y_vel() + 1);
-				}*/
-				if (PlayerObject->obj_get_x_vel() != 0) {
-					PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() / 2);
-				}
-				if (PlayerObject->obj_get_y_vel() != 0) {
-					PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() / 2);
-				}
+		case SDLK_SPACE:
+			if (event.type == SDL_KEYDOWN) {
+				endRound = true;
+			}
+			break;
 
-				break;
+		default:
+			//If left and right keys are up, decelerate x acceleration
+			if (!(keyState[SDLK_a] && keyState[SDLK_LEFT] && keyState[SDLK_d] && keyState[SDLK_RIGHT])) {
+				//std::cout << "decelerate X" << std::endl;
+				//std::cout << PlayerObject->obj_get_x_vel() << std::endl;
+				PlayerObject->obj_set_accel_x(0);
+				if (PlayerObject->obj_get_x_vel() < 0) {
+					//std::cout << "decelerate X" << std::endl;
+					PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.25);
+					//std::cout << PlayerObject->obj_get_x_vel() << std::endl;
+				}
+				if (PlayerObject->obj_get_x_vel() > 0) {
+					PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.25);
+				}
+			}
+			//If up and down keys are up, decelerate y acceleration
+			if (!(keyState[SDLK_w] && keyState[SDLK_UP] && keyState[SDLK_s] && keyState[SDLK_DOWN])) {
+				PlayerObject->obj_set_accel_y(0);
+				if (PlayerObject->obj_get_y_vel() < 0) {
+					//std::cout << "decelerate Y" << std::endl;
+					PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.25);
+				}
+				if (PlayerObject->obj_get_y_vel() > 0) {
+					PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.25);
+				}
+			}
+			break;
 		}
 	
 }
@@ -190,4 +201,24 @@ void GameEngine::Clean() {
 
 bool GameEngine::isRunning() {
 	return Running;
+}
+
+void GameEngine::ResetRound() {
+	//Reset back to starting position
+	PlayerObject->obj_set_x_pos(PlayerObject->obj_get_reset_x());
+	PlayerObject->obj_set_y_pos(PlayerObject->obj_get_reset_y());
+
+	std::cout << "Starting X: " << PlayerObject->obj_get_reset_x() << std::endl;
+	std::cout << "Starting Y: " << PlayerObject->obj_get_reset_y() << std::endl;
+	//Reset Acceleration
+	PlayerObject->obj_set_accel_x(0);
+	PlayerObject->obj_set_accel_y(0);
+
+	//Reset Velocity
+	PlayerObject->obj_set_x_vel(0);
+	PlayerObject->obj_set_y_vel(0);
+
+	//Reset Timer
+
+
 }

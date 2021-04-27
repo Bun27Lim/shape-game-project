@@ -27,7 +27,8 @@ GameObject::~GameObject()
 void GameObject::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h, double start_angle) {
 	
 	int obj_size = 64;
-
+	reset_x = start_x;
+	reset_y = start_y;
 	x_pos = start_x;
 	y_pos = start_y;
 	width = start_w;
@@ -53,34 +54,82 @@ void GameObject::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, i
 // Update Object *
 //****************
 void GameObject::obj_update()
-{
-	x_pos += x_vel;
-	y_pos += y_vel;
+{	
+
+	x_vel += accel_x;
+	y_vel += accel_y;
+
+	if (x_vel > MAX_VEL)
+		x_vel = MAX_VEL;
+	
+	if (x_vel < MAX_VEL * -1.0)
+		x_vel = MAX_VEL * -1.0;
+
+
+	if (y_vel > MAX_VEL)
+		y_vel = MAX_VEL;
+
+	if (y_vel < MAX_VEL * -1.0)
+		y_vel = MAX_VEL * -1.0;
+
+	if (x_pos + x_vel < 0) {
+		x_pos = 0;
+	}
+	else if (x_pos + x_vel + obj_rect.w > SCREEN_WIDTH) {
+		x_pos = SCREEN_WIDTH - obj_rect.w;
+	}
+	else {
+		x_pos += x_vel;
+	}
+
+	if (y_pos + y_vel < 0) {
+		y_pos = 0;
+	}
+	else if (y_pos + y_vel + obj_rect.h > SCREEN_HEIGHT) {
+		y_pos = SCREEN_HEIGHT - obj_rect.h;
+	}
+	else {
+		y_pos += y_vel;
+	}
+
+
+	//Check if position is at the bounds bounce
+	if (x_pos <= 0) {
+		x_vel *= -1.0;
+	}
+	if (x_pos + obj_rect.w >= SCREEN_WIDTH) {
+		x_vel *= -1.0;
+	}
+	if (y_pos <= 0) {
+		y_vel *= -1.0;
+	}
+	if (y_pos + obj_rect.h >= SCREEN_HEIGHT) {
+		y_vel *= -1.0;
+	}
 
 
 	obj_rect.x = x_pos;
 	obj_rect.y = y_pos;
 }
 
-
-//
+//getters and setters
 // 
-int GameObject::obj_get_x_vel()
+double GameObject::obj_get_x_vel()
 {
 	return x_vel;
 }
 
-void GameObject::obj_set_x_vel(int x_vel_in)
+void GameObject::obj_set_x_vel(double x_vel_in)
 {
 	x_vel = x_vel_in;
 }
 
-int GameObject::obj_get_y_vel()
+double GameObject::obj_get_y_vel()
 {
 	return y_vel;
 }
 
-void GameObject::obj_set_y_vel(int y_vel_in)
+void GameObject::obj_set_y_vel(double y_vel_in)
 {
 	y_vel = y_vel_in;
 }
@@ -116,6 +165,16 @@ int GameObject::obj_get_w()
 	return obj_rect.w;
 }
 
+int GameObject::obj_get_reset_x()
+{
+	return reset_x;
+}
+
+int GameObject::obj_get_reset_y()
+{
+	return reset_y;
+}
+
 double GameObject::obj_get_angle()
 {
 	return angle;
@@ -124,6 +183,16 @@ double GameObject::obj_get_angle()
 void GameObject::obj_set_angle(double angle_in)
 {
 	angle = angle_in;
+}
+
+void GameObject::obj_set_accel_x(double a)
+{
+	accel_x = a;
+}
+
+void GameObject::obj_set_accel_y(double a)
+{
+	accel_y = a;
 }
 
 void GameObject::obj_set_rand_pos()

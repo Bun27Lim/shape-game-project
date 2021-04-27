@@ -19,21 +19,29 @@ public:
 	void obj_renderEx(SDL_Renderer*);
 	void obj_quit();
 
-	int obj_get_x_vel();
-	void obj_set_x_vel(int);
-	int obj_get_y_vel();
-	void obj_set_y_vel(int);
+	double obj_get_x_vel();
+	void obj_set_x_vel(double);
+	double obj_get_y_vel();
+	void obj_set_y_vel(double);
 	int obj_get_x_pos();
 	int obj_get_y_pos();
 	void obj_set_x_pos(int);
 	void obj_set_y_pos(int);
 	int obj_get_h();
 	int obj_get_w();
+	int obj_get_reset_x();
+	int obj_get_reset_y();
+	void obj_set_accel_x(double);
+	void obj_set_accel_y(double);
+
 
 	double obj_get_angle();
 	void obj_set_angle(double angle_in);
 
 	void obj_set_rand_pos();
+
+	static const int ACCEL = 3;
+	static const int MAX_VEL = 20;
 
 
 protected:
@@ -45,9 +53,11 @@ protected:
 	SDL_Rect obj_rect;
 	SDL_Rect src_rect;	
 
+	int reset_x, reset_y;
 	int width, height;
-	int x_pos, x_vel;
-	int y_pos, y_vel;
+	double accel_x, accel_y;
+	int x_pos, y_pos;
+	double x_vel, y_vel;
 	double angle;
 
 private:
