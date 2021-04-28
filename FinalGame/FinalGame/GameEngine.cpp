@@ -14,6 +14,12 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		Game_Window = SDL_CreateWindow(title, x, y, width, height, 0);
 		Game_Renderer = SDL_CreateRenderer(Game_Window, -1, 0);
 
+		//Initialize TTF
+		if (TTF_Init() == -1) {
+			std::cout << "TTF_Init: " << TTF_GetError() << std::endl;
+			exit(2);
+		}
+
 		//Initialize background
 		background = new BGLayer;
 		background->bg_init("images/background.png", Game_Renderer, 0, 0, 3496, 2362);
