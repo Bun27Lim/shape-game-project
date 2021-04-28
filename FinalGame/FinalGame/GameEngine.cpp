@@ -31,6 +31,17 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		press_enter->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85, textColor, 36);
 		press_enter->obj_update("Press Enter to Begin!", Game_Renderer);
 
+		//Initialize End Screen
+		end_screen = new EndScreen;
+		end_screen->es_init("images/endscreen.png", Game_Renderer, 0, 0, 640, 480);
+		onEnd = false;
+
+		//Initialize End Text
+		press_tab = new TextObject;
+		textColor = { 0, 0, 0 };
+		press_tab->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85, textColor, 36);
+		press_tab->obj_update("Press Tab to Play Again!", Game_Renderer);
+
 		//Initialize background
 		background = new BGLayer;
 		background->bg_init("images/background.png", Game_Renderer, 0, 0, 3496, 2362);
@@ -157,6 +168,12 @@ void GameEngine::HandleEvents() {
 				onTitle = false;
 			break;
 
+		case SDLK_TAB:
+			if (onEnd){
+				onEnd = false;
+			break;
+			}
+
 		default:
 			//If left and right keys are up, decelerate x acceleration
 			if (!(keyState[SDLK_a] && keyState[SDLK_LEFT] && keyState[SDLK_d] && keyState[SDLK_RIGHT])) {
@@ -198,6 +215,8 @@ void GameEngine::Update() {
 			pe->pe_update();
 		}
 		if (endRound) {
+			onEnd = true;
+
 			int roundScore;
 			if (Accuracy::check_collision(PlayerObject, outline)) {
 				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 100;
@@ -211,9 +230,11 @@ void GameEngine::Update() {
 			std::cout << "Score: " << totalScore << std::endl;
 
 			// randomize and reset player
-			outline->obj_set_rand_pos();
-			endRound = false;
-			text->obj_update("Score:", Game_Renderer);
+			if(!onEnd){
+				outline->obj_set_rand_pos();
+				endRound = false;
+				text->obj_update("Score:", Game_Renderer);
+			}
 		}
 	}
 }
@@ -226,6 +247,10 @@ void GameEngine::Render() {
 	if (onTitle) {
 		start_screen->obj_render(Game_Renderer);
 		press_enter->obj_render(Game_Renderer);
+	}
+	else if(onEnd) {
+		end_screen->obj_render(Game_Renderer);
+		press_tab->obj_render(Game_Renderer);
 	}
 	else {
 		background->obj_render(Game_Renderer);
@@ -249,6 +274,7 @@ void GameEngine::Clean() {
 	PlayerObject->obj_quit();
 	background->obj_quit();
 	start_screen->obj_quit();
+	end_screen->obj_quit();
 	outline->obj_quit();
 	//pe->pe_quit();
 	

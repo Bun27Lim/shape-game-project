@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "BGLayer.h"
 #include "TitleScreen.h"
+#include "EndScreen.h"
 #include "Accuracy.h"
 #include "ParticleEmitter.h"
 #include "TextObject.h"
@@ -38,10 +39,12 @@ class GameEngine {
 		GameObject* outline;
 		BGLayer* background;
 		TitleScreen* start_screen;
+		EndScreen* end_screen;
 		ParticleEmitter* pe;
 		SDL_Color textColor;
 		TextObject* text;
 		TextObject* press_enter;
+		TextObject* press_tab;
 
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
 
@@ -50,6 +53,7 @@ class GameEngine {
 		bool Running;
 		bool endRound;
 		bool onTitle;
+		bool onEnd;
 		bool isPause;
 };
 #endif
