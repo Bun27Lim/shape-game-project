@@ -14,6 +14,12 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		Game_Window = SDL_CreateWindow(title, x, y, width, height, 0);
 		Game_Renderer = SDL_CreateRenderer(Game_Window, -1, 0);
 
+		//Initialize TTF
+		if (TTF_Init() == -1) {
+			std::cout << "TTF_Init: " << TTF_GetError() << std::endl;
+			exit(2);
+		}
+
 		//Initialize background
 		background = new BGLayer;
 		background->bg_init("images/background.png", Game_Renderer, 0, 0, 3496, 2362);
@@ -65,6 +71,12 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 
 		//Create ParticleEmitter
 		pe = new ParticleEmitter;
+
+		//Create Text
+		text = new TextObject;
+		SDL_Color textColor = { 0, 0, 0 };
+		text->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, 50, textColor, 36);
+		text->obj_update("Score:", Game_Renderer);
 
 		Running = true;
 
@@ -184,8 +196,9 @@ void GameEngine::Update() {
 		// randomize and reset player
 		outline->obj_set_rand_pos();
 		endRound = false;
+		text->obj_update("Score:", Game_Renderer);
 	}
-
+	
 }
 
 void GameEngine::Render() {
@@ -194,8 +207,10 @@ void GameEngine::Render() {
 	SDL_RenderClear(Game_Renderer);
 
 	background->obj_render(Game_Renderer);
+	text->obj_render(Game_Renderer);
 	outline->obj_renderEx(Game_Renderer);
 	PlayerObject->obj_render(Game_Renderer);
+
 
 	// Render particles
 	if (pe->pe_started) {
@@ -215,6 +230,10 @@ void GameEngine::Clean() {
 	
 	SDL_DestroyWindow(Game_Window);
 	SDL_DestroyRenderer(Game_Renderer);
+	
+	//Quit SDL subsystems
+	TTF_Quit();
+	IMG_Quit();
 	SDL_Quit();
 }
 

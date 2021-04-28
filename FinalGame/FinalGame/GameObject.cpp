@@ -197,6 +197,7 @@ void GameObject::obj_set_accel_y(double a)
 
 void GameObject::obj_set_rand_pos()
 {
+	srand(time(NULL));
 	x_pos = rand() % (SCREEN_WIDTH - 2* obj_rect.w) + obj_rect.w;
 	y_pos = rand() % (SCREEN_HEIGHT - 2* obj_rect.h) + obj_rect.h;
 	angle = (rand() % 180 - 90);
@@ -222,5 +223,5 @@ void GameObject::obj_renderEx(SDL_Renderer* ren)
 //*****************
 void GameObject::obj_quit()
 {
-	
+	SDL_DestroyTexture(texture);
 }

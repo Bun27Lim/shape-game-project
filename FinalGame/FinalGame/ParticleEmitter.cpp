@@ -100,7 +100,6 @@ void ParticleEmitter::pe_render(SDL_Renderer* ren)
 		for (int i = 0; i < max_parts; i++) {
 			particles[i].obj_render_miss(ren);
 		}
-		std::cout << "render fine" << std::endl;
 	}
 
 	if (part_type == 1) {
