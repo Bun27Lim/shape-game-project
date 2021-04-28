@@ -51,10 +51,12 @@ void TextObject::obj_update(const char* charString, SDL_Renderer* ren)
 
 	int w, h;
 	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-	std::cout << "New String: " << charString << " Width: " << w << " Height: " << h << std::endl;
+	//std::cout << "New String: " << charString << " Width: " << w << " Height: " << h << std::endl;
 
 	obj_rect.w = w;
 	obj_rect.h = h;
+	obj_rect.x = x_pos - (w / 2);
+	obj_rect.y = y_pos - (h / 2);
 }
 
 void TextObject::obj_render(SDL_Renderer* ren) {

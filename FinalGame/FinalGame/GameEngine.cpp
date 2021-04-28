@@ -75,7 +75,8 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		//Create Text
 		text = new TextObject;
 		SDL_Color textColor = { 0, 0, 0 };
-		text->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, 80, textColor, 36);
+		text->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, 50, textColor, 36);
+		text->obj_update("Score:", Game_Renderer);
 
 		Running = true;
 
@@ -195,8 +196,9 @@ void GameEngine::Update() {
 		// randomize and reset player
 		outline->obj_set_rand_pos();
 		endRound = false;
+		text->obj_update("Score:", Game_Renderer);
 	}
-	text->obj_update("Score:", Game_Renderer);
+	
 }
 
 void GameEngine::Render() {
