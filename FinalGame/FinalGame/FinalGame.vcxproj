@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="Accuracy.cpp" />
     <ClCompile Include="BGLayer.cpp" />
+    <ClCompile Include="EndScreen.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Accuracy.h" />
     <ClInclude Include="BGLayer.h" />
+    <ClInclude Include="EndScreen.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Particle.h" />
