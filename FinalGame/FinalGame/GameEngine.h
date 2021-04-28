@@ -42,12 +42,16 @@ class GameEngine {
 		EndScreen* end_screen;
 		ParticleEmitter* pe;
 		SDL_Color textColor;
+
+		// text labels
 		TextObject* text;
+		TextObject* txtScore;
 		TextObject* press_enter;
 		TextObject* press_tab;
+		TextObject* txt_score_lb;
+		TextObject* txt_round_score;
 
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
-
 
 		int totalScore;
 		bool Running;

@@ -19,6 +19,7 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 			std::cout << "TTF_Init: " << TTF_GetError() << std::endl;
 			exit(2);
 		}
+		const char* textFont = "images/dwerneck.ttf";
 
 		//Initialize Title Screen;
 		start_screen = new TitleScreen;
@@ -27,8 +28,8 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 
 		//Create Title Text
 		press_enter = new TextObject;
-		textColor = { 0, 0, 0 };
-		press_enter->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85, textColor, 36);
+		textColor = { 0, 100, 10 };
+		press_enter->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85, textColor, 30);
 		press_enter->obj_update("Press Enter to Begin!", Game_Renderer);
 
 		//Initialize End Screen
@@ -38,8 +39,8 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 
 		//Initialize End Text
 		press_tab = new TextObject;
-		textColor = { 0, 0, 0 };
-		press_tab->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85, textColor, 36);
+		textColor = { 0, 200, 80 };
+		press_tab->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85, textColor, 30);
 		press_tab->obj_update("Press Tab to Play Again!", Game_Renderer);
 
 		//Initialize background
@@ -97,8 +98,22 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		//Create Text
 		text = new TextObject;
 		textColor = { 0, 0, 0 };
-		text->obj_init("./images/Daniel_Light.ttf", Game_Renderer, SCREEN_WIDTH / 2, 50, textColor, 36);
-		text->obj_update("Score:", Game_Renderer);
+		text->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, 30, textColor, 24);
+		text->obj_update("score:", Game_Renderer);
+
+		txtScore = new TextObject;
+		txtScore->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, 55, textColor, 26);
+		txtScore->obj_update("0", Game_Renderer);
+
+		txt_score_lb = new TextObject;
+		textColor = { 0, 130, 200 };
+		txt_score_lb->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.45, textColor, 44);
+		txt_score_lb->obj_update("Your Score", Game_Renderer);
+
+		txt_round_score = new TextObject;
+		textColor = { 90, 0, 200 };
+		txt_round_score->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.55, textColor, 40);
+		txt_round_score->obj_update("0", Game_Renderer);
 
 		Running = true;
 
@@ -207,13 +222,14 @@ void GameEngine::HandleEvents() {
 
 //Update Game
 void GameEngine::Update() {
-	if (!onTitle) {
+	if (pe->pe_started) {
+		pe->pe_update();
+	}
+	if (!(onTitle || onEnd)) {
 		PlayerObject->obj_update();
 		outline->obj_update();
 
-		if (pe->pe_started) {
-			pe->pe_update();
-		}
+		
 		if (endRound) {
 			onEnd = true;
 
@@ -230,11 +246,14 @@ void GameEngine::Update() {
 			std::cout << "Score: " << totalScore << std::endl;
 
 			// randomize and reset player
-			if(!onEnd){
-				outline->obj_set_rand_pos();
-				endRound = false;
-				text->obj_update("Score:", Game_Renderer);
-			}
+
+			outline->obj_set_rand_pos();
+			endRound = false;
+			std::string s = std::to_string(roundScore);
+			char const* charScore = s.c_str();
+			txtScore->obj_update(charScore, Game_Renderer);
+			txt_round_score->obj_update(charScore, Game_Renderer);
+			//text->obj_update("Score:", Game_Renderer);
 		}
 	}
 }
@@ -251,10 +270,13 @@ void GameEngine::Render() {
 	else if(onEnd) {
 		end_screen->obj_render(Game_Renderer);
 		press_tab->obj_render(Game_Renderer);
+		txt_score_lb->obj_render(Game_Renderer);
+		txt_round_score->obj_render(Game_Renderer);
 	}
 	else {
 		background->obj_render(Game_Renderer);
 		text->obj_render(Game_Renderer);
+		txtScore->obj_render(Game_Renderer);
 		outline->obj_renderEx(Game_Renderer);
 		PlayerObject->obj_render(Game_Renderer);
 	}
