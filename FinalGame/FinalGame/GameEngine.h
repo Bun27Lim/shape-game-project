@@ -7,6 +7,7 @@
 #include "BGLayer.h"
 #include "Accuracy.h"
 #include "ParticleEmitter.h"
+#include "TextObject.h"
 #include <cstdlib>
 #include <time.h>
 
@@ -36,6 +37,7 @@ class GameEngine {
 		GameObject* outline;
 		BGLayer* background;
 		ParticleEmitter* pe;
+		TextObject* text;
 
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
 
