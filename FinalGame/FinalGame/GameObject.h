@@ -40,7 +40,7 @@ public:
 
 	void obj_set_rand_pos();
 
-	static const int ACCEL = 3;
+	static const int ACCEL = 4;
 	static const int MAX_VEL = 20;
 
 

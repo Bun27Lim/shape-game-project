@@ -178,6 +178,20 @@ void GameEngine::HandleEvents() {
 			}
 			break;
 
+			//Rotate Counter Clockwise
+		case SDLK_q:
+			if (!(onTitle || onEnd || isPause) && event.type == SDL_KEYDOWN) {
+				PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() - 5.0);
+			}
+			break;
+
+			//Rotate Clockwise
+		case SDLK_e:
+			if (!(onTitle || onEnd || isPause) && event.type == SDL_KEYDOWN) {
+				PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() + 5.0);
+			}
+			break;
+
 			//Round reset (restarts current round; does not create new one)
 		case SDLK_r:
 			GameEngine::ResetRound();
@@ -225,27 +239,22 @@ void GameEngine::HandleEvents() {
 			if (!isPause) {
 				//If left and right keys are up, decelerate x acceleration
 				if (!(keyState[SDLK_a] && keyState[SDLK_LEFT] && keyState[SDLK_d] && keyState[SDLK_RIGHT])) {
-					//std::cout << "decelerate X" << std::endl;
-					//std::cout << PlayerObject->obj_get_x_vel() << std::endl;
 					PlayerObject->obj_set_accel_x(0);
 					if (PlayerObject->obj_get_x_vel() < 0) {
-						//std::cout << "decelerate X" << std::endl;
-						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.25);
-						//std::cout << PlayerObject->obj_get_x_vel() << std::endl;
+						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.5);
 					}
 					if (PlayerObject->obj_get_x_vel() > 0) {
-						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.25);
+						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.5);
 					}
 				}
 				//If up and down keys are up, decelerate y acceleration
 				if (!(keyState[SDLK_w] && keyState[SDLK_UP] && keyState[SDLK_s] && keyState[SDLK_DOWN])) {
 					PlayerObject->obj_set_accel_y(0);
 					if (PlayerObject->obj_get_y_vel() < 0) {
-						//std::cout << "decelerate Y" << std::endl;
-						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.25);
+						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.5);
 					}
 					if (PlayerObject->obj_get_y_vel() > 0) {
-						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.25);
+						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.5);
 					}
 				}
 			}
@@ -321,7 +330,7 @@ void GameEngine::Render() {
 		text->obj_render(Game_Renderer);
 		txtScore->obj_render(Game_Renderer);
 		outline->obj_renderEx(Game_Renderer);
-		PlayerObject->obj_render(Game_Renderer);
+		PlayerObject->obj_renderEx(Game_Renderer);
 
 		if (onEnd) {
 			end_screen->render_blank(Game_Renderer);
@@ -380,7 +389,9 @@ void GameEngine::ResetRound() {
 	PlayerObject->obj_set_x_vel(0);
 	PlayerObject->obj_set_y_vel(0);
 
-	//Reset Outline
+	//Reset Angle
+	PlayerObject->obj_set_angle(0);
+
 	//Reset Outline
 	outline->obj_set_x_pos(outline->obj_get_reset_x());
 	outline->obj_set_y_pos(outline->obj_get_reset_y());

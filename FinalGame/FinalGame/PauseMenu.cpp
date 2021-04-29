@@ -33,7 +33,7 @@ void PauseMenu::pause_init(const char* graphic, SDL_Renderer* ren, int start_x, 
 	pause_text->obj_init(textFont, ren, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.45, textColor, 30);
 	pause_text->obj_update("Game is PAUSED", ren);
 
-	pause_text2 = new TextObject;
+	//pause_text2 = new TextObject;
 	//pause_text2->obj_init(textFont, ren, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.40, textColor, 30);
 	//pause_text2->obj_update("Press Enter to Continue", ren);
 }
