@@ -13,6 +13,7 @@ ParticleEmitter::~ParticleEmitter()
 {
 }
 
+//Emitter initialization
 void ParticleEmitter::pe_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int width, int height, int type)
 {
 	pe_started = true;
@@ -68,6 +69,7 @@ void ParticleEmitter::pe_init(const char* graphic, SDL_Renderer* ren, int start_
 	
 }
 
+//Emitter updater
 void ParticleEmitter::pe_update()
 {
 	int max_parts = MAX_PARTS;
@@ -90,6 +92,7 @@ void ParticleEmitter::pe_update()
 	}
 }
 
+//Emitter renderer
 void ParticleEmitter::pe_render(SDL_Renderer* ren)
 {
 	int max_parts = MAX_PARTS;
@@ -111,6 +114,7 @@ void ParticleEmitter::pe_render(SDL_Renderer* ren)
 	}
 }
 
+//Particle quit
 void ParticleEmitter::pe_quit()
 {
 	int max_parts = MAX_PARTS;

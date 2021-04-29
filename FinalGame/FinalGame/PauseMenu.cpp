@@ -8,7 +8,7 @@ PauseMenu::PauseMenu(){
 	pause_text2 = NULL;
 }
 
-
+//Initializes pause
 void PauseMenu::pause_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h)
 {
 	x_pos = start_x;

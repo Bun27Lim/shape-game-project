@@ -69,6 +69,7 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		int rand_h = rand() % (SCREEN_HEIGHT - 128) + 64;
 		double rand_agl = rand() % 180 - 90.0;
 
+		//Switch statement for selecting both character and cooresponding outline
 		switch (pal)
 		{
 		case 0:
@@ -114,10 +115,11 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		txtScore->obj_update("0", Game_Renderer);
 
 		
-
+		//Check to see if game running or quit
 		Running = true;
 
 	}
+	//Error message
 	else {
 		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
 		Running = false;
@@ -128,6 +130,7 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 //Handle Events
 void GameEngine::HandleEvents() {
 
+	//Quit Game
 	SDL_Event event;
 	SDL_PollEvent(&event);
 	switch (event.type) {
@@ -175,17 +178,19 @@ void GameEngine::HandleEvents() {
 			}
 			break;
 
+			//Round reset (restarts current round; does not create new one)
 		case SDLK_r:
 			GameEngine::ResetRound();
 			break;
 
+			//End current round
 		case SDLK_SPACE:
 			if (event.type == SDL_KEYDOWN) {
 				endRound = true;
 			}
 			break;
 
-
+			//Start game from title screen
 		case SDLK_RETURN:
 			if (event.type == SDL_KEYDOWN) {
 				if (onTitle)
@@ -196,12 +201,14 @@ void GameEngine::HandleEvents() {
 			}
 			break;
 
+			//Start new game from end screen
 		case SDLK_TAB:
 			if (onEnd){
 				onEnd = false;
 				ResetRound();
 			break;
 
+			//Pause game
 		case SDLK_ESCAPE:
 			if (event.type == SDL_KEYDOWN) {
 				if (!onTitle && !onEnd && !isPause) {
@@ -213,6 +220,7 @@ void GameEngine::HandleEvents() {
 			}
 		}
 
+		//Sets acceleration/movement physics
 		default:
 			if (!isPause) {
 				//If left and right keys are up, decelerate x acceleration
@@ -251,12 +259,15 @@ void GameEngine::Update() {
 	if (pe->pe_started) {
 		pe->pe_update();
 	}
+
+	//Checks to make sure round is in progress
 	if (!(onTitle || onEnd || isPause)) {
 		PlayerObject->obj_update();
 		outline->obj_update();
 
 		totalScore -= 1;
 		
+		//Calculates score and pre-sets new round
 		if (endRound) {
 			onEnd = true;
 
@@ -278,6 +289,7 @@ void GameEngine::Update() {
 			endRound = false;
 		}
 		
+		//Displays score to screen
 		std::string s = std::to_string(totalScore);
 		char const* charScore = s.c_str();
 		txtScore->obj_update(charScore, Game_Renderer);
@@ -285,20 +297,24 @@ void GameEngine::Update() {
 	}
 }
 
+//Texture renderer
 void GameEngine::Render() {
 
 	SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255); //white screen
 	SDL_RenderClear(Game_Renderer);
 
+	//Start Screen
 	if (onTitle) {
 		start_screen->obj_render(Game_Renderer);
 		start_screen->press_enter->obj_render(Game_Renderer);
 	}
+	//Pause Menu
 	else if (isPause) {
 		pause_menu->obj_render(Game_Renderer);
 		pause_menu->pause_text->obj_render(Game_Renderer);
 		pause_menu->pause_text2->obj_render(Game_Renderer);
 	}
+	//Regular Game
 	else {
 
 		background->obj_render(Game_Renderer);
@@ -343,10 +359,12 @@ void GameEngine::Clean() {
 	SDL_Quit();
 }
 
+//Check to see if game is running
 bool GameEngine::isRunning() {
 	return Running;
 }
 
+//Restarts round to original starting position
 void GameEngine::ResetRound() {
 	//Reset back to starting position
 	PlayerObject->obj_set_x_pos(PlayerObject->obj_get_reset_x());

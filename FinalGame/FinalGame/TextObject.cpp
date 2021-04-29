@@ -19,6 +19,7 @@ TextObject::~TextObject()
 {
 }
 
+//Initializes text object
 void TextObject::obj_init(const char* ttf_file, SDL_Renderer* ren, int start_x, int start_y, SDL_Color start_color, int size)
 {
 	
@@ -37,15 +38,18 @@ void TextObject::obj_init(const char* ttf_file, SDL_Renderer* ren, int start_x, 
 	obj_color = start_color;
 }
 
+//Updates with added text
 void TextObject::obj_update(const char* charString, SDL_Renderer* ren)
 {
 	SDL_Surface* text_surface;
 
+	//Error message
 	if (!(text_surface = TTF_RenderText_Solid(obj_font, charString, obj_color))) {
 		std::cout << "error font" << std::endl;
 		return;
 	}
 
+	//Texture creator
 	texture = SDL_CreateTextureFromSurface(ren, text_surface);
 	SDL_FreeSurface(text_surface);
 
@@ -59,10 +63,12 @@ void TextObject::obj_update(const char* charString, SDL_Renderer* ren)
 	obj_rect.y = y_pos - (h / 2);
 }
 
+//Renders text object
 void TextObject::obj_render(SDL_Renderer* ren) {
 	SDL_RenderCopy(ren, texture, NULL, &obj_rect);
 }
 
+//Destroys text object
 void TextObject::obj_quit() {
 	SDL_DestroyTexture(texture);
 }

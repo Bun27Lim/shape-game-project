@@ -5,7 +5,7 @@ TitleScreen::TitleScreen(){
 	press_enter = nullptr;
 }
 
-
+//Initializes title screen
 void TitleScreen::ts_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h)
 {
 	x_pos = start_x;
@@ -25,6 +25,7 @@ void TitleScreen::ts_init(const char* graphic, SDL_Renderer* ren, int start_x, i
 
 	texture = TextureManager::LoadTexture(graphic, ren);
 
+	//Creates text object
 	press_enter = new TextObject;
 	textColor = { 0, 100, 10 };
 	press_enter->obj_init(textFont, ren, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85, textColor, 30);

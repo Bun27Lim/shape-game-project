@@ -7,6 +7,7 @@ EndScreen::EndScreen() {
 	txt_score_lb = NULL;
 }
 
+//Initializes and displays end screen
 void EndScreen::es_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h)
 {
 	x_pos = start_x;
@@ -26,16 +27,19 @@ void EndScreen::es_init(const char* graphic, SDL_Renderer* ren, int start_x, int
 
 	texture = TextureManager::LoadTexture(graphic, ren);
 
+	//Shows play again text
 	press_tab = new TextObject;
 	textColor = { 0, 150, 50 };
 	press_tab->obj_init(textFont, ren, SCREEN_WIDTH / 2, (int) SCREEN_HEIGHT * 0.7, textColor, 30);
 	press_tab->obj_update("Press Tab to Play Again!", ren);
 
+	//Displays "Your Score"
 	txt_score_lb = new TextObject;
 	textColor = { 0, 130, 200 };
 	txt_score_lb->obj_init(textFont, ren, SCREEN_WIDTH / 2, (int)(SCREEN_HEIGHT * 0.45), textColor, 44);
 	txt_score_lb->obj_update("Your Score", ren);
 
+	//Displays score value
 	txt_round_score = new TextObject;
 	textColor = { 90, 0, 200 };
 	txt_round_score->obj_init(textFont, ren, SCREEN_WIDTH / 2, (int)(SCREEN_HEIGHT * 0.55), textColor, 40);

@@ -19,10 +19,12 @@ Particle::~Particle()
 {
 }
 
+//State setter
 void Particle::obj_set_state(int st_in) {
 	state = st_in;
 }
 
+//Initializes particles
 void Particle::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int width, int height)
 {
 	int sz = 20;
@@ -46,6 +48,7 @@ void Particle::obj_init(const char* graphic, SDL_Renderer* ren, int start_x, int
 	//obj_update_hit();
 }
 
+//Updates hit
 void Particle::obj_update_hit()
 {
 	x_pos += x_vel;
@@ -57,6 +60,7 @@ void Particle::obj_update_hit()
 	lifetime -= 1;
 }
 
+//Updates miss
 void Particle::obj_update_miss()
 {
 	x_pos += x_vel;
@@ -73,6 +77,7 @@ void Particle::obj_update_miss()
 	lifetime -= 1;
 }
 
+//Renders miss
 void Particle::obj_render_miss(SDL_Renderer* ren)
 {
 	if (lifetime > 0) {
@@ -80,6 +85,7 @@ void Particle::obj_render_miss(SDL_Renderer* ren)
 	}
 }
 
+//Renders hit
 void Particle::obj_render_hit(SDL_Renderer* ren)
 {
 	if (lifetime > 0) {
@@ -91,6 +97,7 @@ void Particle::obj_render_hit(SDL_Renderer* ren)
 	}
 }
 
+//Getters and Setters
 void Particle::obj_set_x_vel(float x_in)
 {
 	x_vel = x_in;
