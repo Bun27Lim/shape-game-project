@@ -2,10 +2,10 @@
 #define GE_H
 
 #include "screenInfo.h"
-#include "PlayerShape.h"
 #include "GameObject.h"
 #include "BGLayer.h"
 #include "TitleScreen.h"
+#include "PauseMenu.h"
 #include "EndScreen.h"
 #include "Accuracy.h"
 #include "ParticleEmitter.h"
@@ -39,6 +39,7 @@ class GameEngine {
 		GameObject* outline;
 		BGLayer* background;
 		TitleScreen* start_screen;
+		PauseMenu* pause_menu;
 		EndScreen* end_screen;
 		ParticleEmitter* pe;
 		SDL_Color textColor;
@@ -46,8 +47,6 @@ class GameEngine {
 		// text labels
 		TextObject* text;
 		TextObject* txtScore;
-		TextObject* press_enter;
-		TextObject* press_tab;
 		TextObject* txt_score_lb;
 		TextObject* txt_round_score;
 

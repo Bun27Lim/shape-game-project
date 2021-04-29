@@ -1,5 +1,10 @@
 #include "EndScreen.h"
 
+EndScreen::EndScreen() {
+	textColor = { 0,0,0 };
+	press_tab = nullptr;
+}
+
 void EndScreen::es_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h)
 {
 	x_pos = start_x;
@@ -18,4 +23,9 @@ void EndScreen::es_init(const char* graphic, SDL_Renderer* ren, int start_x, int
 	src_rect.h = height;
 
 	texture = TextureManager::LoadTexture(graphic, ren);
+
+	press_tab = new TextObject;
+	textColor = { 0, 100, 10 };
+	press_tab->obj_init(textFont, ren, SCREEN_WIDTH / 2, (int) SCREEN_HEIGHT * 0.85, textColor, 30);
+	press_tab->obj_update("Press Tab to Play Again!", ren);
 }
