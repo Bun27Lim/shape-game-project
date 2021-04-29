@@ -12,6 +12,7 @@ GameEngine::GameEngine(){
 	background = nullptr;
 	start_screen = nullptr;
 	end_screen = nullptr;
+	pause_menu = nullptr;
 	outline = nullptr;
 	pe = nullptr;
 	text = nullptr;
@@ -43,6 +44,10 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		//Initialize Title Screen;
 		start_screen = new TitleScreen;
 		start_screen->ts_init("images/titlescreen.png", Game_Renderer, 0, 0, 640, 480);
+
+		//Initialize Pause Screen;
+		pause_menu = new PauseMenu;
+		pause_menu->pause_init("images/background.png", Game_Renderer, 0, 0, 3496, 2362);
 
 		//Initialize End Screen
 		end_screen = new EndScreen;
@@ -184,40 +189,57 @@ void GameEngine::HandleEvents() {
 
 
 		case SDLK_RETURN:
-			if (onTitle)
-				onTitle = false;
+			if (event.type == SDL_KEYDOWN) {
+				if (onTitle)
+					onTitle = false;
+				if (isPause)
+					isPause = false;
+				
+			}
 			break;
 
 		case SDLK_TAB:
 			if (onEnd){
 				onEnd = false;
 			break;
+
+		case SDLK_ESCAPE:
+			if (event.type == SDL_KEYDOWN) {
+				if (!onTitle && !onEnd && !isPause) {
+					isPause = true;
+				}
+				else {
+					isPause = false;
+				}
 			}
+		}
 
 		default:
-			//If left and right keys are up, decelerate x acceleration
-			if (!(keyState[SDLK_a] && keyState[SDLK_LEFT] && keyState[SDLK_d] && keyState[SDLK_RIGHT])) {
-				//std::cout << "decelerate X" << std::endl;
-				//std::cout << PlayerObject->obj_get_x_vel() << std::endl;
-				PlayerObject->obj_set_accel_x(0);
-				if (PlayerObject->obj_get_x_vel() < 0) {
+			if (!isPause) {
+				//If left and right keys are up, decelerate x acceleration
+				if (!(keyState[SDLK_a] && keyState[SDLK_LEFT] && keyState[SDLK_d] && keyState[SDLK_RIGHT])) {
 					//std::cout << "decelerate X" << std::endl;
-					PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.25);
 					//std::cout << PlayerObject->obj_get_x_vel() << std::endl;
+					PlayerObject->obj_set_accel_x(0);
+					if (PlayerObject->obj_get_x_vel() < 0) {
+						//std::cout << "decelerate X" << std::endl;
+						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.25);
+						//std::cout << PlayerObject->obj_get_x_vel() << std::endl;
+					}
+					if (PlayerObject->obj_get_x_vel() > 0) {
+						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.25);
+					}
 				}
-				if (PlayerObject->obj_get_x_vel() > 0) {
-					PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.25);
-				}
-			}
-			//If up and down keys are up, decelerate y acceleration
-			if (!(keyState[SDLK_w] && keyState[SDLK_UP] && keyState[SDLK_s] && keyState[SDLK_DOWN])) {
-				PlayerObject->obj_set_accel_y(0);
-				if (PlayerObject->obj_get_y_vel() < 0) {
-					//std::cout << "decelerate Y" << std::endl;
-					PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.25);
-				}
-				if (PlayerObject->obj_get_y_vel() > 0) {
-					PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.25);
+				//If up and down keys are up, decelerate y acceleration
+				if (!(keyState[SDLK_w] && keyState[SDLK_UP] && keyState[SDLK_s] && keyState[SDLK_DOWN])) {
+					PlayerObject->obj_set_accel_y(0);
+					if (PlayerObject->obj_get_y_vel() < 0) {
+						//std::cout << "decelerate Y" << std::endl;
+						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.25);
+					}
+					if (PlayerObject->obj_get_y_vel() > 0) {
+						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.25);
+					}
 				}
 			}
 			break;
@@ -230,7 +252,7 @@ void GameEngine::Update() {
 	if (pe->pe_started) {
 		pe->pe_update();
 	}
-	if (!(onTitle || onEnd)) {
+	if (!(onTitle || onEnd || isPause)) {
 		PlayerObject->obj_update();
 		outline->obj_update();
 
@@ -277,6 +299,10 @@ void GameEngine::Render() {
 		end_screen->press_tab->obj_render(Game_Renderer);
 		txt_score_lb->obj_render(Game_Renderer);
 		txt_round_score->obj_render(Game_Renderer);
+	}
+	else if (isPause) {
+		pause_menu->obj_render(Game_Renderer);
+		pause_menu->pause_text->obj_render(Game_Renderer);
 	}
 	else {
 		background->obj_render(Game_Renderer);

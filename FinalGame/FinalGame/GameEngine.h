@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "BGLayer.h"
 #include "TitleScreen.h"
+#include "PauseMenu.h"
 #include "EndScreen.h"
 #include "Accuracy.h"
 #include "ParticleEmitter.h"
@@ -38,6 +39,7 @@ class GameEngine {
 		GameObject* outline;
 		BGLayer* background;
 		TitleScreen* start_screen;
+		PauseMenu* pause_menu;
 		EndScreen* end_screen;
 		ParticleEmitter* pe;
 		SDL_Color textColor;

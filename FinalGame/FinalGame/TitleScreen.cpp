@@ -1,6 +1,6 @@
 #include "TitleScreen.h"
 
-TitleScreen::TitleScreen() : press_enter() {
+TitleScreen::TitleScreen(){
 	textColor = { 0,0,0 };
 	press_enter = nullptr;
 }
