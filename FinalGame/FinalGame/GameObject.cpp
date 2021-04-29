@@ -23,10 +23,9 @@ GameObject::GameObject() {
 
 	reset_x = 0;
 	reset_y = 0;
+	reset_angle = 0;
 
 	texture = nullptr;
-
-	thing_this = 0;
 
 }
 
@@ -187,6 +186,11 @@ int GameObject::obj_get_reset_y()
 	return reset_y;
 }
 
+double GameObject::obj_get_reset_angle()
+{
+	return reset_angle;
+}
+
 double GameObject::obj_get_angle()
 {
 	return angle;
@@ -209,10 +213,10 @@ void GameObject::obj_set_accel_y(double a)
 
 void GameObject::obj_set_rand_pos()
 {
-	srand(time(NULL));
-	x_pos = rand() % (SCREEN_WIDTH - 2* obj_rect.w) + obj_rect.w;
-	y_pos = rand() % (SCREEN_HEIGHT - 2* obj_rect.h) + obj_rect.h;
-	angle = (rand() % 180 - 90.0);
+	srand(unsigned int(time(NULL)));
+	reset_x = rand() % (SCREEN_WIDTH - 2 * obj_rect.w) + obj_rect.w;
+	reset_y = rand() % (SCREEN_HEIGHT - 2 * obj_rect.h) + obj_rect.h;
+	reset_angle = (rand() % 180 - 90);
 
 	std::cout << "x, y: " << x_pos << ", " << y_pos << std::endl;
 }

@@ -34,8 +34,8 @@ public:
 	void obj_set_accel_x(double);
 	void obj_set_accel_y(double);
 
-
 	double obj_get_angle();
+	double obj_get_reset_angle();
 	void obj_set_angle(double angle_in);
 
 	void obj_set_rand_pos();
@@ -52,6 +52,7 @@ protected:
 	SDL_Rect src_rect;	
 
 	int reset_x, reset_y;
+	double reset_angle;
 	int width, height;
 	double accel_x, accel_y;
 	int x_pos, y_pos;
@@ -59,7 +60,6 @@ protected:
 	double angle;
 
 private:
-	int thing_this;
 
 };
 #endif

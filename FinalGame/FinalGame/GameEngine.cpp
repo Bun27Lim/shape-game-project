@@ -2,7 +2,7 @@
 
 
 GameEngine::GameEngine(){
-	totalScore = 0;
+	totalScore = 1000;
 	textColor = { 0,0,0 };
 
 	txtScore = nullptr;
@@ -16,8 +16,6 @@ GameEngine::GameEngine(){
 	outline = nullptr;
 	pe = nullptr;
 	text = nullptr;
-	txt_round_score = nullptr;
-	txt_score_lb = nullptr;
 
 	endRound = false;
 	Running = false;
@@ -51,7 +49,7 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 
 		//Initialize End Screen
 		end_screen = new EndScreen;
-		end_screen->es_init("images/endscreen.png", Game_Renderer, 0, 0, 640, 480);
+		end_screen->es_init("images/endscreen.png", Game_Renderer, SCREEN_WIDTH * 0.2, SCREEN_WIDTH * 0.13, 640, 480);
 
 		//Initialize background
 		background = new BGLayer;
@@ -115,15 +113,7 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		txtScore->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, 55, textColor, 26);
 		txtScore->obj_update("0", Game_Renderer);
 
-		txt_score_lb = new TextObject;
-		textColor = { 0, 130, 200 };
-		txt_score_lb->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, (int) (SCREEN_HEIGHT * 0.45), textColor, 44);
-		txt_score_lb->obj_update("Your Score", Game_Renderer);
-
-		txt_round_score = new TextObject;
-		textColor = { 90, 0, 200 };
-		txt_round_score->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, (int) (SCREEN_HEIGHT * 0.55), textColor, 40);
-		txt_round_score->obj_update("0", Game_Renderer);
+		
 
 		Running = true;
 
@@ -156,25 +146,33 @@ void GameEngine::HandleEvents() {
 			//Move right
 		case SDLK_d:
 		case SDLK_RIGHT:
-			PlayerObject->obj_set_accel_x(PlayerObject->ACCEL);
+			if (!(onTitle || onEnd || isPause)) {
+				PlayerObject->obj_set_accel_x(PlayerObject->ACCEL);
+			}
 			break;
 
 			//Move left
 		case SDLK_a:
 		case SDLK_LEFT:
-			PlayerObject->obj_set_accel_x(PlayerObject->ACCEL * (-1.0));
+			if (!(onTitle || onEnd || isPause)) {
+				PlayerObject->obj_set_accel_x(PlayerObject->ACCEL * (-1.0));
+			}
 			break;
 
 			//Move up (negative y direction)
 		case SDLK_w:
 		case SDLK_UP:
-			PlayerObject->obj_set_accel_y(PlayerObject->ACCEL * (-1.0));
+			if (!(onTitle || onEnd || isPause)) {
+				PlayerObject->obj_set_accel_y(PlayerObject->ACCEL * (-1.0));
+			}
 			break;
 
 			//Move down (positive y direction)
 		case SDLK_s:
 		case SDLK_DOWN:
-			PlayerObject->obj_set_accel_y(PlayerObject->ACCEL);
+			if (!(onTitle || onEnd || isPause)) {
+				PlayerObject->obj_set_accel_y(PlayerObject->ACCEL);
+			}
 			break;
 
 		case SDLK_r:
@@ -201,6 +199,7 @@ void GameEngine::HandleEvents() {
 		case SDLK_TAB:
 			if (onEnd){
 				onEnd = false;
+				ResetRound();
 			break;
 
 		case SDLK_ESCAPE:
@@ -256,60 +255,64 @@ void GameEngine::Update() {
 		PlayerObject->obj_update();
 		outline->obj_update();
 
+		totalScore -= 1;
 		
 		if (endRound) {
 			onEnd = true;
 
-			int roundScore;
+			double roundScore;
 			if (Accuracy::check_collision(PlayerObject, outline)) {
-				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 100;
+				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 4096.0;
+				std::cout << "overlap area - angle difference: " << roundScore << std::endl;
 				pe->pe_init("./images/jeff.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 1); //if collided
 			}
 			else {
 				roundScore = 0;
 				pe->pe_init("./images/diana.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 0);	//not collided
 			}
-			totalScore += roundScore;
-			std::cout << "Score: " << totalScore << std::endl;
+			totalScore *= roundScore;
+			std::cout << "round score: " << totalScore << std::endl;
 
-			// randomize and reset player
-
+			// Randomize outline position for reset
 			outline->obj_set_rand_pos();
 			endRound = false;
-			std::string s = std::to_string(roundScore);
-			char const* charScore = s.c_str();
-			txtScore->obj_update(charScore, Game_Renderer);
-			txt_round_score->obj_update(charScore, Game_Renderer);
-			//text->obj_update("Score:", Game_Renderer);
 		}
+		
+		std::string s = std::to_string(totalScore);
+		char const* charScore = s.c_str();
+		txtScore->obj_update(charScore, Game_Renderer);
+		end_screen->txt_round_score->obj_update(charScore, Game_Renderer);
 	}
 }
 
 void GameEngine::Render() {
 
-	SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255); //white screen
 	SDL_RenderClear(Game_Renderer);
 
 	if (onTitle) {
 		start_screen->obj_render(Game_Renderer);
 		start_screen->press_enter->obj_render(Game_Renderer);
 	}
-	else if(onEnd) {
-		end_screen->obj_render(Game_Renderer);
-		end_screen->press_tab->obj_render(Game_Renderer);
-		txt_score_lb->obj_render(Game_Renderer);
-		txt_round_score->obj_render(Game_Renderer);
-	}
 	else if (isPause) {
 		pause_menu->obj_render(Game_Renderer);
 		pause_menu->pause_text->obj_render(Game_Renderer);
+		pause_menu->pause_text2->obj_render(Game_Renderer);
 	}
 	else {
+
 		background->obj_render(Game_Renderer);
 		text->obj_render(Game_Renderer);
 		txtScore->obj_render(Game_Renderer);
 		outline->obj_renderEx(Game_Renderer);
 		PlayerObject->obj_render(Game_Renderer);
+
+		if (onEnd) {
+			end_screen->render_blank(Game_Renderer);
+			end_screen->press_tab->obj_render(Game_Renderer);
+			end_screen->txt_score_lb->obj_render(Game_Renderer);
+			end_screen->txt_round_score->obj_render(Game_Renderer);
+		}
 	}
 
 
@@ -359,7 +362,11 @@ void GameEngine::ResetRound() {
 	PlayerObject->obj_set_x_vel(0);
 	PlayerObject->obj_set_y_vel(0);
 
-	//Reset Timer
-
+	//Reset Outline
+	//Reset Outline
+	outline->obj_set_x_pos(outline->obj_get_reset_x());
+	outline->obj_set_y_pos(outline->obj_get_reset_y());
+	outline->obj_set_angle(outline->obj_get_reset_angle());
+	totalScore = 1000;
 
 }
