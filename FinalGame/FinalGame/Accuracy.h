@@ -1,7 +1,6 @@
 #ifndef CD_H
 #define CD_H
 
-#include "PlayerShape.h"
 #include "GameObject.h"
 
 class Accuracy

@@ -2,7 +2,6 @@
 #define GE_H
 
 #include "screenInfo.h"
-#include "PlayerShape.h"
 #include "GameObject.h"
 #include "BGLayer.h"
 #include "TitleScreen.h"
@@ -46,8 +45,6 @@ class GameEngine {
 		// text labels
 		TextObject* text;
 		TextObject* txtScore;
-		TextObject* press_enter;
-		TextObject* press_tab;
 		TextObject* txt_score_lb;
 		TextObject* txt_round_score;
 

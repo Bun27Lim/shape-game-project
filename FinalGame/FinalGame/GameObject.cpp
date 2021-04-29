@@ -16,6 +16,18 @@ GameObject::GameObject() {
 	src_rect.y = 0;
 	src_rect.w = 0;
 	src_rect.h = 0;
+
+	accel_x = 0;
+	accel_y = 0;
+	angle = 0;
+
+	reset_x = 0;
+	reset_y = 0;
+
+	texture = nullptr;
+
+	thing_this = 0;
+
 }
 
 GameObject::~GameObject()
@@ -200,7 +212,7 @@ void GameObject::obj_set_rand_pos()
 	srand(time(NULL));
 	x_pos = rand() % (SCREEN_WIDTH - 2* obj_rect.w) + obj_rect.w;
 	y_pos = rand() % (SCREEN_HEIGHT - 2* obj_rect.h) + obj_rect.h;
-	angle = (rand() % 180 - 90);
+	angle = (rand() % 180 - 90.0);
 
 	std::cout << "x, y: " << x_pos << ", " << y_pos << std::endl;
 }
