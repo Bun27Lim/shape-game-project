@@ -47,8 +47,6 @@ class GameEngine {
 		// text labels
 		TextObject* text;
 		TextObject* txtScore;
-		TextObject* txt_score_lb;
-		TextObject* txt_round_score;
 
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
 
