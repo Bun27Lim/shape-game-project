@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <time.h>       /* time_t, struct tm, difftime, time, mktime */
+
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;

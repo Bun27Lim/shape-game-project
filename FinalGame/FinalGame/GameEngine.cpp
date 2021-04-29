@@ -194,13 +194,17 @@ void GameEngine::HandleEvents() {
 
 			//Round reset (restarts current round; does not create new one)
 		case SDLK_r:
-			GameEngine::ResetRound();
+			if (!(onTitle || onEnd || isPause)) {
+				GameEngine::ResetRound();
+			}
 			break;
 
 			//End current round
 		case SDLK_SPACE:
-			if (event.type == SDL_KEYDOWN) {
-				endRound = true;
+			if (!(onTitle || onEnd || isPause)) {
+				if (event.type == SDL_KEYDOWN) {
+					endRound = true;
+				}
 			}
 			break;
 
@@ -282,7 +286,7 @@ void GameEngine::Update() {
 
 			double roundScore;
 			if (Accuracy::check_collision(PlayerObject, outline)) {
-				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 4096.0;
+				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 4000.0;
 				std::cout << "overlap area - angle difference: " << roundScore << std::endl;
 				pe->pe_init("./images/jeff.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 1); //if collided
 			}
@@ -320,6 +324,8 @@ void GameEngine::Render() {
 	//Pause Menu
 	else if (isPause) {
 		pause_menu->obj_render(Game_Renderer);
+		text->obj_render(Game_Renderer);
+		txtScore->obj_render(Game_Renderer);
 		pause_menu->pause_text->obj_render(Game_Renderer);
 		pause_menu->pause_text2->obj_render(Game_Renderer);
 	}
