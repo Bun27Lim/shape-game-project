@@ -180,13 +180,17 @@ void GameEngine::HandleEvents() {
 
 			//Round reset (restarts current round; does not create new one)
 		case SDLK_r:
-			GameEngine::ResetRound();
+			if (!(onTitle || onEnd || isPause)) {
+				GameEngine::ResetRound();
+			}
 			break;
 
 			//End current round
 		case SDLK_SPACE:
-			if (event.type == SDL_KEYDOWN) {
-				endRound = true;
+			if (!(onTitle || onEnd || isPause)) {
+				if (event.type == SDL_KEYDOWN) {
+					endRound = true;
+				}
 			}
 			break;
 
@@ -311,6 +315,8 @@ void GameEngine::Render() {
 	//Pause Menu
 	else if (isPause) {
 		pause_menu->obj_render(Game_Renderer);
+		text->obj_render(Game_Renderer);
+		txtScore->obj_render(Game_Renderer);
 		pause_menu->pause_text->obj_render(Game_Renderer);
 		pause_menu->pause_text2->obj_render(Game_Renderer);
 	}
