@@ -20,3 +20,4 @@ The faster and more accurate the fitting is to the line, the higher the score.
 #### Arrow Keys - Up, Down, Left, Right. (AWSD works as well)
 #### ESC - Pause
 #### SPACE - Place Character
+#### TAB - Start New Round
