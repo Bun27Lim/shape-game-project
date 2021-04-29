@@ -273,7 +273,7 @@ void GameEngine::Update() {
 
 			double roundScore;
 			if (Accuracy::check_collision(PlayerObject, outline)) {
-				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 4096.0;
+				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 4000.0;
 				std::cout << "overlap area - angle difference: " << roundScore << std::endl;
 				pe->pe_init("./images/jeff.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 1); //if collided
 			}
