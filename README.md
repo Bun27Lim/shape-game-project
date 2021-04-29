@@ -2,4 +2,21 @@
 Final Project for 2D Game Engine using SDL
 
 # Team Members
-Lydia, Jordan, Alan, James
+Lydia, Jordan, Alan
+
+# Game Summary
+Player is spawned in as a one of our random characters<br />
+<img src="/FinalGame/FinalGame/images/luna.png" alt="Luna" width="180" height="180"/>
+<img src="/FinalGame/FinalGame/images/diana.png" alt="Diana" width="180" height="180"/>
+<img src="/FinalGame/FinalGame/images/jeff.png" alt="Jeff" width="180" height="180"/>
+<img src="/FinalGame/FinalGame/images/katie.png" alt="Katie" width="180" height="180"/>
+<img src="/FinalGame/FinalGame/images/travis.png" alt="Travis" width="180" height="180"/>
+<br />
+The object is to move the chracter to match the outline randomly spawned in the map.
+The faster and more accurate the fitting is to the line, the higher the score.
+
+
+# Controls
+#### Arrow Keys - Up, Down, Left, Right. (AWSD works as well)
+#### ESC - Pause
+#### SPACE - Place Character
