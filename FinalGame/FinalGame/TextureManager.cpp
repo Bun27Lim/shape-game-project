@@ -10,6 +10,7 @@ SDL_Texture* TextureManager::LoadTexture(const char* file, SDL_Renderer* ren) {
 	return texture;
 }
 
+//Basic texture renderer
 void TextureManager::Render(SDL_Renderer* ren, SDL_Texture* texture, SDL_Rect src, SDL_Rect dest) {
 	SDL_RenderCopy(ren, texture, &src, &dest);
 }

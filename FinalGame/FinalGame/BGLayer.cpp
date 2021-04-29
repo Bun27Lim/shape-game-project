@@ -1,5 +1,6 @@
 #include "BGLayer.h"
 
+//Initializes and displays background layer
 void BGLayer::bg_init(const char* graphic, SDL_Renderer* ren, int start_x, int start_y, int start_w, int start_h)
 {
 	x_pos = start_x;
