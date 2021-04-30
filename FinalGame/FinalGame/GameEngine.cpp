@@ -419,11 +419,11 @@ void GameEngine::HandleMovement() {
 	
 	// Rotate Counter-Clockwise
 	if (keyState[SDL_SCANCODE_Q] || keyState[SDL_SCANCODE_V]) {
-		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() - 5);
+		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() - 2);
 	}
 	// Rotate Clockwise
 	else if (keyState[SDL_SCANCODE_E] || keyState[SDL_SCANCODE_B]) {
-		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() + 5);
+		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() + 2);
 	}
 	else {
 		if (PlayerObject->obj_get_angle_vel() > 0) {
@@ -442,35 +442,35 @@ void GameEngine::RandomizePlayer() {
 	
 	int pal = rand() % 5;
 	int sz = 400;
-	int rand_w = rand() % (SCREEN_WIDTH - 128) + 64;
-	int rand_h = rand() % (SCREEN_HEIGHT - 128) + 64;
+	int rand_w = rand() % (SCREEN_WIDTH - 256) + 128;
+	int rand_h = rand() % (SCREEN_HEIGHT - 256) + 128;
 	double rand_agl = rand() % 180 - 90.0;
 
 	//Switch statement for selecting both character and cooresponding outline
 	switch (pal)
 	{
 	case 0:
-		PlayerObject->obj_init("images/jeff.png", Game_Renderer, 30, 30, sz, sz, 0);
+		PlayerObject->obj_init("images/jeff.png", Game_Renderer, 30, SCREEN_HEIGHT*0.8, sz, sz, 0);
 		outline->obj_init("images/jeff_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
 		break;
 
 	case 1:
-		PlayerObject->obj_init("images/travis.png", Game_Renderer, 30, 30, sz, sz, 0);
+		PlayerObject->obj_init("images/travis.png", Game_Renderer, 30, SCREEN_HEIGHT * 0.8, sz, sz, 0);
 		outline->obj_init("images/travis_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
 		break;
 
 	case 2:
-		PlayerObject->obj_init("images/diana.png", Game_Renderer, 30, 30, sz, sz, 0);
+		PlayerObject->obj_init("images/diana.png", Game_Renderer, 30, SCREEN_HEIGHT * 0.8, sz, sz, 0);
 		outline->obj_init("images/diana_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
 		break;
 
 	case 3:
-		PlayerObject->obj_init("images/katie.png", Game_Renderer, 30, 30, sz, sz, 0);
+		PlayerObject->obj_init("images/katie.png", Game_Renderer, 30, SCREEN_HEIGHT * 0.8, sz, sz, 0);
 		outline->obj_init("images/katie_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
 		break;
 
 	case 4:
-		PlayerObject->obj_init("images/luna.png", Game_Renderer, 30, 30, sz, sz, 0);
+		PlayerObject->obj_init("images/luna.png", Game_Renderer, 30, SCREEN_HEIGHT * 0.8, sz, sz, 0);
 		outline->obj_init("images/luna_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
 		break;
 
