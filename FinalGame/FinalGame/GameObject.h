@@ -47,7 +47,6 @@ public:
 	static const int MAX_VEL = 10;
 	static const int MAX_ROT = 20;
 
-
 protected:
 	//Sprite* obj_sprite;
 	SDL_Texture* texture;
