@@ -114,8 +114,10 @@ void GameEngine::HandleEvents() {
 	switch (event.key.keysym.sym) {
 			//Round reset (restarts current round; does not create new one)
 		case SDLK_r:
-			if (!(onTitle || onEnd || isPause)) {
+			if (!(onTitle || isPause)) {
 				ResetRound(0);
+				if (onEnd)
+					onEnd = false;
 			}
 			break;
 
@@ -186,25 +188,33 @@ void GameEngine::Update() {
 
 			double roundScore;
 			if (Accuracy::check_collision(PlayerObject, outline)) {
-				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 4000.0;
-				std::cout << "overlap area - angle difference: " << roundScore << std::endl;
+				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 3500.0;
+				std::cout << "score multiplier: " << roundScore << std::endl;
 				pe->pe_init("./images/jeff.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 1); //if collided
 			}
 			else {
 				roundScore = 0;
 				pe->pe_init("./images/diana.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 0);	//not collided
 			}
+
 			totalScore *= roundScore;
 			std::cout << "round score: " << totalScore << std::endl;
 
 			endRound = false;
 		}
+		else {
+			std::string s = std::to_string(totalScore);
+			char const* charScore = s.c_str();
+			txtScore->obj_update(charScore, Game_Renderer);
+		}
 		
 		//Displays score to screen
 		std::string s = std::to_string(totalScore);
 		char const* charScore = s.c_str();
-		txtScore->obj_update(charScore, Game_Renderer);
+		
 		end_screen->txt_round_score->obj_update(charScore, Game_Renderer);
+		
+		
 	}
 }
 
@@ -299,15 +309,16 @@ void GameEngine::ResetRound(int newIn) {
 	PlayerObject->obj_set_angle(0);
 
 	//Reset Outline
-	outline->obj_set_x_pos(outline->obj_get_reset_x());
-	outline->obj_set_y_pos(outline->obj_get_reset_y());
-	outline->obj_set_angle(outline->obj_get_reset_angle());
+	
 	totalScore = 1000;
 
 	if (newIn == 1) {
 		// if new game is started, make new player and outline
 		RandomizePlayer();
 		outline->obj_set_rand_pos();
+		outline->obj_set_x_pos(outline->obj_get_reset_x());
+		outline->obj_set_y_pos(outline->obj_get_reset_y());
+		outline->obj_set_angle(outline->obj_get_reset_angle());
 	}
 
 }
@@ -337,12 +348,12 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_accel_x(0);
 
 		if (PlayerObject->obj_get_x_vel() < 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.2);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.1);
 		}
 		if (PlayerObject->obj_get_x_vel() > 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.2);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.1);
 		}
-		if (PlayerObject->obj_get_x_vel() < 0.2 || PlayerObject->obj_get_x_vel() > -0.2) {
+		if (PlayerObject->obj_get_x_vel() < 0.1 || PlayerObject->obj_get_x_vel() > -0.1) {
 			PlayerObject->obj_set_x_vel(0);
 		}
 
@@ -353,23 +364,31 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_accel_y(0);
 
 		if (PlayerObject->obj_get_y_vel() < 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.2);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.1);
 		}
 		if (PlayerObject->obj_get_y_vel() > 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.2);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.1);
 		}
-		if (PlayerObject->obj_get_y_vel() < 0.2 || PlayerObject->obj_get_y_vel() > -0.2) {
+		if (PlayerObject->obj_get_y_vel() < 0.1 || PlayerObject->obj_get_y_vel() > -0.1) {
 			PlayerObject->obj_set_y_vel(0);
 		}
 	}
 	
 	// Rotate Counter-Clockwise
 	if (keyState[SDL_SCANCODE_Q]) {
-		PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() - 5.0);
+		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() - 5);
 	}
 	// Rotate Clockwise
-	if (keyState[SDL_SCANCODE_E]) {
-		PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() + 5.0);
+	else if (keyState[SDL_SCANCODE_E]) {
+		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() + 5);
+	}
+	else {
+		if (PlayerObject->obj_get_angle_vel() > 0) {
+			PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() - 1);
+		}
+		if (PlayerObject->obj_get_angle_vel() < 0) {
+			PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() + 1);
+		}
 	}
 
 }
