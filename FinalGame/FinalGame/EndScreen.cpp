@@ -40,7 +40,7 @@ void EndScreen::es_init(const char* graphic, SDL_Renderer* ren, int start_x, int
 	press_tab = new TextObject;
 	textColor = { 0, 150, 50 };
 	press_tab->obj_init(textFont2, ren, SCREEN_WIDTH / 2, (int) SCREEN_HEIGHT * 0.7, textColor, 24);
-	press_tab->obj_update("Press Tab to Play Again!", ren);
+	press_tab->obj_update("Press TAB to play again!", ren);
 
 	//Displays "Your Score"
 	txt_score_lb = new TextObject;

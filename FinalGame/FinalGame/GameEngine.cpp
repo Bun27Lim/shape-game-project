@@ -169,9 +169,12 @@ void GameEngine::HandleEvents() {
 			//Start game from title screen
 		case SDLK_RETURN:
 			if (onTitle)
+				ResetRound(1);
 				onTitle = false;
 			if (isPause)
 				isPause = false;
+			if (onEnd)
+				onEnd = false;
 			break;
 
 			//Start new game from end screen
