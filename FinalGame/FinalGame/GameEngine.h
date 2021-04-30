@@ -10,6 +10,7 @@
 #include "Accuracy.h"
 #include "ParticleEmitter.h"
 #include "TextObject.h"
+#include "AudioManager.h"
 #include <cstdlib>
 #include <time.h>
 
@@ -50,6 +51,9 @@ class GameEngine {
 		TextObject* text;
 		TextObject* txtScore;
 
+		//Audio Stuff
+		Mix_Music* titleMusic;
+
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
 
 		int totalScore;
@@ -58,5 +62,6 @@ class GameEngine {
 		bool onTitle;
 		bool onEnd;
 		bool isPause;
+		bool isSound;
 };
 #endif
