@@ -69,13 +69,25 @@ void GameObject::obj_update()
 
 	x_vel += accel_x;
 	y_vel += accel_y;
-
+	
 	if (x_vel > MAX_VEL)
 		x_vel = MAX_VEL;
 	
 	if (x_vel < MAX_VEL * -1.0)
 		x_vel = MAX_VEL * -1.0;
 
+	if (angle_vel > MAX_ROT)
+		angle_vel = MAX_ROT;
+
+	if (angle_vel < MAX_ROT * -1.0)
+		angle_vel = MAX_ROT * -1.0;
+
+	angle += angle_vel;
+
+	if (angle > 180.0)
+		angle = -180.0;
+	if (angle < -180.0)
+		angle = 180.0;
 
 	if (y_vel > MAX_VEL)
 		y_vel = MAX_VEL;
@@ -189,6 +201,16 @@ double GameObject::obj_get_reset_angle()
 	return reset_angle;
 }
 
+double GameObject::obj_get_angle_vel()
+{
+	return angle_vel;
+}
+
+void GameObject::obj_set_angle_vel(double velIn)
+{
+	angle_vel = velIn;
+}
+
 double GameObject::obj_get_angle()
 {
 	return angle;
@@ -216,9 +238,9 @@ double GameObject::obj_get_accel_x() {
 void GameObject::obj_set_rand_pos()
 {
 	srand(unsigned int(time(NULL)));
-	reset_x = rand() % (SCREEN_WIDTH - 2 * obj_rect.w) + obj_rect.w;
-	reset_y = rand() % (SCREEN_HEIGHT - 2 * obj_rect.h) + obj_rect.h;
-	reset_angle = (rand() % 180 - 90);
+	reset_x = rand() % (SCREEN_WIDTH - 4 * obj_rect.w) + 2*obj_rect.w;
+	reset_y = rand() % (SCREEN_HEIGHT - 4 * obj_rect.h) + 2*obj_rect.h;
+	reset_angle = ((rand() % 180) - 90);
 
 	std::cout << "x, y: " << x_pos << ", " << y_pos << std::endl;
 }

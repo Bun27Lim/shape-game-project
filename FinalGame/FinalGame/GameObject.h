@@ -35,15 +35,17 @@ public:
 	void obj_set_accel_y(double);
 	double obj_get_accel_x();
 
+	double obj_get_angle_vel();
+	void obj_set_angle_vel(double);
 	double obj_get_angle();
 	double obj_get_reset_angle();
-	void obj_set_angle(double angle_in);
+	void obj_set_angle(double);
 
 	void obj_set_rand_pos();
 
-	static const int ACCEL = 1;
-	static const int MAX_VEL = 15;
-
+	static const int ACCEL = 2;
+	static const int MAX_VEL = 10;
+	static const int MAX_ROT = 20;
 
 protected:
 	//Sprite* obj_sprite;
@@ -57,7 +59,7 @@ protected:
 	int width, height;
 	double accel_x, accel_y;
 	int x_pos, y_pos;
-	double x_vel, y_vel;
+	double x_vel, y_vel, angle_vel;
 	double angle;
 
 private:
