@@ -148,9 +148,16 @@ void GameEngine::HandleEvents() {
 				if (!onTitle && !onEnd && !isPause) {
 					isPause = true;
 				}
+				else if (!onTitle && isPause) {
+					onTitle = true;
+				}
+				else if (onEnd) {
+					onTitle = true;
+				}
 				else {
 					isPause = false;
 				}
+				
 			}
 		default:
 			break;
@@ -335,6 +342,10 @@ void GameEngine::HandleMovement() {
 		if (PlayerObject->obj_get_x_vel() > 0) {
 			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.2);
 		}
+		if (PlayerObject->obj_get_x_vel() < 0.2 || PlayerObject->obj_get_x_vel() > -0.2) {
+			PlayerObject->obj_set_x_vel(0);
+		}
+
 	}
 
 	//If up and down keys are up, decelerate y acceleration
@@ -346,6 +357,9 @@ void GameEngine::HandleMovement() {
 		}
 		if (PlayerObject->obj_get_y_vel() > 0) {
 			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.2);
+		}
+		if (PlayerObject->obj_get_y_vel() < 0.2 || PlayerObject->obj_get_y_vel() > -0.2) {
+			PlayerObject->obj_set_y_vel(0);
 		}
 	}
 	

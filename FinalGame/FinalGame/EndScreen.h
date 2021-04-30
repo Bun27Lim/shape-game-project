@@ -15,6 +15,7 @@ public:
 	TextObject* txt_score_lb;
 	TextObject* txt_round_score;
 	TextObject* txt_round_over;
+	TextObject* exit_text;
 
 private:
 
