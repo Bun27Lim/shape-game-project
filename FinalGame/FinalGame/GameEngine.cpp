@@ -72,7 +72,7 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		text = new TextObject;
 		textColor = { 0, 0, 0 };
 		text->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, 30, textColor, 24);
-		text->obj_update("score:", Game_Renderer);
+		text->obj_update("time:", Game_Renderer);
 		
 		txtScore = new TextObject;
 		txtScore->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, 55, textColor, 26);
@@ -188,7 +188,7 @@ void GameEngine::Update() {
 
 			double roundScore;
 			if (Accuracy::check_collision(PlayerObject, outline)) {
-				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 3500.0;
+				roundScore = (Accuracy::overlap_area(PlayerObject, outline)) / 4000.0;
 				std::cout << "score multiplier: " << roundScore << std::endl;
 				pe->pe_init("./images/jeff.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 1); //if collided
 			}
@@ -308,8 +308,6 @@ void GameEngine::ResetRound(int newIn) {
 	//Reset Angle
 	PlayerObject->obj_set_angle(0);
 
-	//Reset Outline
-	
 	totalScore = 1000;
 
 	if (newIn == 1) {
@@ -375,11 +373,11 @@ void GameEngine::HandleMovement() {
 	}
 	
 	// Rotate Counter-Clockwise
-	if (keyState[SDL_SCANCODE_Q]) {
+	if (keyState[SDL_SCANCODE_Q] || keyState[SDL_SCANCODE_V]) {
 		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() - 5);
 	}
 	// Rotate Clockwise
-	else if (keyState[SDL_SCANCODE_E]) {
+	else if (keyState[SDL_SCANCODE_E] || keyState[SDL_SCANCODE_B]) {
 		PlayerObject->obj_set_angle_vel(PlayerObject->obj_get_angle_vel() + 5);
 	}
 	else {
