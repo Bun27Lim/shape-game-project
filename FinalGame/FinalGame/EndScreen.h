@@ -14,10 +14,9 @@ public:
 	TextObject* press_tab;
 	TextObject* txt_score_lb;
 	TextObject* txt_round_score;
+	TextObject* txt_round_over;
 
 private:
-
-	const char* textFont = "images/dwerneck.ttf";
 
 	SDL_Color textColor;
 };

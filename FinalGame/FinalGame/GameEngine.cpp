@@ -190,8 +190,6 @@ void GameEngine::Update() {
 			totalScore *= roundScore;
 			std::cout << "round score: " << totalScore << std::endl;
 
-			// Randomize outline position for reset
-			outline->obj_set_rand_pos();
 			endRound = false;
 		}
 		
@@ -233,6 +231,7 @@ void GameEngine::Render() {
 
 		if (onEnd) {
 			end_screen->render_blank(Game_Renderer);
+			end_screen->txt_round_over->obj_render(Game_Renderer);
 			end_screen->press_tab->obj_render(Game_Renderer);
 			end_screen->txt_score_lb->obj_render(Game_Renderer);
 			end_screen->txt_round_score->obj_render(Game_Renderer);
@@ -299,7 +298,9 @@ void GameEngine::ResetRound(int newIn) {
 	totalScore = 1000;
 
 	if (newIn == 1) {
+		// if new game is started, make new player and outline
 		RandomizePlayer();
+		outline->obj_set_rand_pos();
 	}
 
 }
@@ -312,7 +313,7 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_accel_x(PlayerObject->ACCEL);
 	}
 	// Go left -x direction
-	if ( keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_RIGHT]) {
+	if ( keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) {
 		PlayerObject->obj_set_accel_x(PlayerObject->ACCEL * (-1.0));
 	}
 	// Go up -y direction
