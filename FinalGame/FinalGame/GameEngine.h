@@ -24,16 +24,17 @@ class GameEngine {
 		void Update();
 		void Render();
 		void Clean();
-		void HandleMovement();
 
 		bool isRunning();
-
-		void ResetRound();
 
 		SDL_Renderer* Game_Renderer;
 
 
 	private:
+		void HandleMovement();
+		void RandomizePlayer();
+		void ResetRound(int);
+
 		SDL_Window* Game_Window;
 
 		GameObject* PlayerObject;
