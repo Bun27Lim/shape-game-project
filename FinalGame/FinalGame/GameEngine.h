@@ -24,6 +24,7 @@ class GameEngine {
 		void Update();
 		void Render();
 		void Clean();
+		void HandleMovement();
 
 		bool isRunning();
 
