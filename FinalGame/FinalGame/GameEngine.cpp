@@ -16,12 +16,14 @@ GameEngine::GameEngine(){
 	outline = nullptr;
 	pe = nullptr;
 	text = nullptr;
+	titleMusic = nullptr;
 
 	endRound = false;
 	Running = false;
 	isPause = false;
 	onEnd = false;
 	onTitle = true;
+	isSound = true;
 }
 GameEngine::~GameEngine(){}
 
@@ -39,6 +41,12 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		}
 		const char* textFont = "images/dwerneck.ttf";
 
+		//Initialize Mixer
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		{
+			printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		}
+
 		//Initialize Title Screen;
 		start_screen = new TitleScreen;
 		start_screen->ts_init("images/titlescreen.png", Game_Renderer, 0, 0, 640, 480);
@@ -54,6 +62,11 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		//Initialize background
 		background = new BGLayer;
 		background->bg_init("images/background.png", Game_Renderer, 0, 0, 3496, 2362);
+
+		//Initialize Audio
+		titleMusic = Mix_LoadMUS("audio/ben.mp3");
+		//Play the music
+		Mix_PlayMusic(titleMusic, -1);
 
 		//Initialize Player Object
 		PlayerObject = new GameObject;
@@ -113,6 +126,30 @@ void GameEngine::HandleEvents() {
 
 	switch (event.key.keysym.sym) {
 			//Round reset (restarts current round; does not create new one)
+		case SDLK_1:
+			if (Mix_PlayingMusic() == 0)
+			{
+				//Play the music
+				Mix_PlayMusic(titleMusic, -1);
+			}
+			//If music is being played
+			else
+			{
+				//If the music is paused
+				if (Mix_PausedMusic() == 1)
+				{
+					//Resume the music
+					Mix_ResumeMusic();
+				}
+				//If the music is playing
+				else
+				{
+					//Pause the music
+					Mix_PauseMusic();
+				}
+			}
+			break;
+
 		case SDLK_r:
 			if (!(onTitle || isPause)) {
 				ResetRound(0);
@@ -173,6 +210,10 @@ void GameEngine::Update() {
 	if (pe->pe_started) {
 		pe->pe_update();
 	}
+
+	/*if (isSound) {
+		Mix_PlayMusic(titleMusic, -1);
+	}*/
 
 	//Checks to make sure round is in progress
 	if (!(onTitle || onEnd || isPause)) {
@@ -276,10 +317,14 @@ void GameEngine::Clean() {
 	
 	SDL_DestroyWindow(Game_Window);
 	SDL_DestroyRenderer(Game_Renderer);
+
+	Mix_FreeMusic(titleMusic);
+	titleMusic = NULL;
 	
 	//Quit SDL subsystems
 	TTF_Quit();
 	IMG_Quit();
+	Mix_Quit();
 	SDL_Quit();
 }
 
