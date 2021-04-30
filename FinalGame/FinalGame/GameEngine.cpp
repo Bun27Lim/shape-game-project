@@ -130,68 +130,24 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 //Handle Events
 void GameEngine::HandleEvents() {
 
+
 	//Quit Game
 	SDL_Event event;
-	SDL_PollEvent(&event);
-	switch (event.type) {
-		case SDL_QUIT:
+	//Handle events on queue
+	while (SDL_PollEvent(&event) != 0)
+	{
+		//User requests quit
+		if (event.type == SDL_QUIT)
+		{
 			Running = false;
-			break;
-	
-		default:
-			break;
+		}
 	}
 
-	//If button press is down
-	
+	//If Game is not pause handle movement
+	if (!isPause && !onTitle && !onEnd)
+		HandleMovement();
+
 	switch (event.key.keysym.sym) {
-
-			//Move right
-		case SDLK_d:
-		case SDLK_RIGHT:
-			if (!(onTitle || onEnd || isPause)) {
-				PlayerObject->obj_set_accel_x(PlayerObject->ACCEL);
-			}
-			break;
-
-			//Move left
-		case SDLK_a:
-		case SDLK_LEFT:
-			if (!(onTitle || onEnd || isPause)) {
-				PlayerObject->obj_set_accel_x(PlayerObject->ACCEL * (-1.0));
-			}
-			break;
-
-			//Move up (negative y direction)
-		case SDLK_w:
-		case SDLK_UP:
-			if (!(onTitle || onEnd || isPause)) {
-				PlayerObject->obj_set_accel_y(PlayerObject->ACCEL * (-1.0));
-			}
-			break;
-
-			//Move down (positive y direction)
-		case SDLK_s:
-		case SDLK_DOWN:
-			if (!(onTitle || onEnd || isPause)) {
-				PlayerObject->obj_set_accel_y(PlayerObject->ACCEL);
-			}
-			break;
-
-			//Rotate Counter Clockwise
-		case SDLK_q:
-			if (!(onTitle || onEnd || isPause) && event.type == SDL_KEYDOWN) {
-				PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() - 5.0);
-			}
-			break;
-
-			//Rotate Clockwise
-		case SDLK_e:
-			if (!(onTitle || onEnd || isPause) && event.type == SDL_KEYDOWN) {
-				PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() + 5.0);
-			}
-			break;
-
 			//Round reset (restarts current round; does not create new one)
 		case SDLK_r:
 			if (!(onTitle || onEnd || isPause)) {
@@ -201,32 +157,28 @@ void GameEngine::HandleEvents() {
 
 			//End current round
 		case SDLK_SPACE:
+
 			if (!(onTitle || onEnd || isPause)) {
-				if (event.type == SDL_KEYDOWN) {
-					endRound = true;
-				}
+				endRound = true;
 			}
 			break;
 
 			//Start game from title screen
 		case SDLK_RETURN:
-			if (event.type == SDL_KEYDOWN) {
-				if (onTitle)
-					onTitle = false;
-				if (isPause)
-					isPause = false;
-				
-			}
+			if (onTitle)
+				onTitle = false;
+			if (isPause)
+				isPause = false;
 			break;
 
 			//Start new game from end screen
 		case SDLK_TAB:
-			if (onEnd){
+			if (onEnd) {
 				onEnd = false;
 				ResetRound();
-			break;
+				break;
 
-			//Pause game
+				//Pause game
 		case SDLK_ESCAPE:
 			if (event.type == SDL_KEYDOWN) {
 				if (!onTitle && !onEnd && !isPause) {
@@ -236,33 +188,9 @@ void GameEngine::HandleEvents() {
 					isPause = false;
 				}
 			}
-		}
-
-		//Sets acceleration/movement physics
 		default:
-			if (!isPause) {
-				//If left and right keys are up, decelerate x acceleration
-				if (!(keyState[SDLK_a] && keyState[SDLK_LEFT] && keyState[SDLK_d] && keyState[SDLK_RIGHT])) {
-					PlayerObject->obj_set_accel_x(0);
-					if (PlayerObject->obj_get_x_vel() < 0) {
-						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.5);
-					}
-					if (PlayerObject->obj_get_x_vel() > 0) {
-						PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.5);
-					}
-				}
-				//If up and down keys are up, decelerate y acceleration
-				if (!(keyState[SDLK_w] && keyState[SDLK_UP] && keyState[SDLK_s] && keyState[SDLK_DOWN])) {
-					PlayerObject->obj_set_accel_y(0);
-					if (PlayerObject->obj_get_y_vel() < 0) {
-						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.5);
-					}
-					if (PlayerObject->obj_get_y_vel() > 0) {
-						PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.5);
-					}
-				}
-			}
 			break;
+			}
 		}
 	
 }
@@ -403,5 +331,60 @@ void GameEngine::ResetRound() {
 	outline->obj_set_y_pos(outline->obj_get_reset_y());
 	outline->obj_set_angle(outline->obj_get_reset_angle());
 	totalScore = 1000;
+
+}
+
+//Handle key states
+void GameEngine::HandleMovement() {
+
+	// Go right +x direction
+	if (keyState[SDL_SCANCODE_RIGHT] || keyState[SDL_SCANCODE_D]) {
+		PlayerObject->obj_set_accel_x(PlayerObject->ACCEL);
+	}
+	// Go left -x direction
+	if (keyState[SDL_SCANCODE_LEFT]) {
+		PlayerObject->obj_set_accel_x(PlayerObject->ACCEL * (-1.0));
+	}
+	// Go up -y direction
+	if (keyState[SDL_SCANCODE_UP]) {
+		PlayerObject->obj_set_accel_y(PlayerObject->ACCEL * (-1.0));
+	}
+	// Go down +y direction
+	if (keyState[SDL_SCANCODE_DOWN]) {
+		PlayerObject->obj_set_accel_y(PlayerObject->ACCEL);
+	}
+
+	// If left and right keys are up, decelerate x acceleration
+	if (!keyState[SDL_SCANCODE_LEFT] && !keyState[SDL_SCANCODE_RIGHT]) {
+		PlayerObject->obj_set_accel_x(0);
+
+		if (PlayerObject->obj_get_x_vel() < 0) {
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.5);
+		}
+		if (PlayerObject->obj_get_x_vel() > 0) {
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.5);
+		}
+	}
+
+	//If up and down keys are up, decelerate y acceleration
+	if (!keyState[SDL_SCANCODE_UP] && !keyState[SDL_SCANCODE_DOWN]) {
+		PlayerObject->obj_set_accel_y(0);
+
+		if (PlayerObject->obj_get_y_vel() < 0) {
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.5);
+		}
+		if (PlayerObject->obj_get_y_vel() > 0) {
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.5);
+		}
+	}
+	
+	// Rotate Counter-Clockwise
+	if (keyState[SDL_SCANCODE_Q]) {
+		PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() - 5.0);
+	}
+	// Rotate Clockwise
+	if (keyState[SDL_SCANCODE_E]) {
+		PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() + 5.0);
+	}
 
 }

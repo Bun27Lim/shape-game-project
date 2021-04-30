@@ -118,13 +118,11 @@ void GameObject::obj_update()
 		y_vel *= -1.0;
 	}
 
-
 	obj_rect.x = x_pos;
 	obj_rect.y = y_pos;
 }
 
 //getters and setters
-// 
 double GameObject::obj_get_x_vel()
 {
 	return x_vel;
@@ -209,6 +207,10 @@ void GameObject::obj_set_accel_x(double a)
 void GameObject::obj_set_accel_y(double a)
 {
 	accel_y = a;
+}
+
+double GameObject::obj_get_accel_x() {
+	return accel_x;
 }
 
 void GameObject::obj_set_rand_pos()

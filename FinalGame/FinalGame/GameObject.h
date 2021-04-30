@@ -33,6 +33,7 @@ public:
 	int obj_get_reset_y();
 	void obj_set_accel_x(double);
 	void obj_set_accel_y(double);
+	double obj_get_accel_x();
 
 	double obj_get_angle();
 	double obj_get_reset_angle();
@@ -40,8 +41,8 @@ public:
 
 	void obj_set_rand_pos();
 
-	static const int ACCEL = 4;
-	static const int MAX_VEL = 20;
+	static const int ACCEL = 1;
+	static const int MAX_VEL = 10;
 
 
 protected:
