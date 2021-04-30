@@ -64,9 +64,10 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		background->bg_init("images/background.png", Game_Renderer, 0, 0, 3496, 2362);
 
 		//Initialize Audio
-		titleMusic = Mix_LoadMUS("audio/ben.mp3");
+		titleMusic = AudioManager::loadMusic("audio/ben.mp3");
 		//Play the music
 		Mix_PlayMusic(titleMusic, -1);
+		Mix_VolumeMusic(16);
 
 		//Initialize Player Object
 		PlayerObject = new GameObject;
@@ -127,25 +128,30 @@ void GameEngine::HandleEvents() {
 	switch (event.key.keysym.sym) {
 			//Round reset (restarts current round; does not create new one)
 		case SDLK_1:
-			if (Mix_PlayingMusic() == 0)
-			{
-				//Play the music
-				Mix_PlayMusic(titleMusic, -1);
-			}
-			//If music is being played
-			else
-			{
-				//If the music is paused
-				if (Mix_PausedMusic() == 1)
+			if (onTitle) {
+				if (Mix_PlayingMusic() == 0)
 				{
-					//Resume the music
-					Mix_ResumeMusic();
+					//Play the music
+					isSound = true;
+					Mix_PlayMusic(titleMusic, -1);
 				}
-				//If the music is playing
+				//If music is being played
 				else
 				{
-					//Pause the music
-					Mix_PauseMusic();
+					//If the music is paused
+					if (Mix_PausedMusic() == 1)
+					{
+						//Resume the music
+						isSound = true;
+						Mix_ResumeMusic();
+					}
+					//If the music is playing
+					else
+					{
+						//Pause the music
+						isSound = false;
+						Mix_PauseMusic();
+					}
 				}
 			}
 			break;
@@ -187,9 +193,15 @@ void GameEngine::HandleEvents() {
 				}
 				else if (!onTitle && isPause) {
 					onTitle = true;
+					if(isSound)
+						Mix_ResumeMusic();
 				}
 				else if (onEnd) {
 					onTitle = true;
+					onEnd = false;
+				}
+				else if (onTitle) {
+					Running = false;
 				}
 				else {
 					isPause = false;
@@ -197,6 +209,15 @@ void GameEngine::HandleEvents() {
 				
 			}
 		default:
+			if (!onTitle)
+			{
+				//Pause the music
+				Mix_PauseMusic();
+			}
+			if (onTitle && isSound) {
+				Mix_ResumeMusic();
+			}
+
 			break;
 			}
 		}
@@ -382,12 +403,12 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_accel_x(0);
 
 		if (PlayerObject->obj_get_x_vel() < 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.2);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.05);
 		}
 		if (PlayerObject->obj_get_x_vel() > 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.2);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.05);
 		}
-		if (PlayerObject->obj_get_x_vel() < 0.2 || PlayerObject->obj_get_x_vel() > -0.2) {
+		if (PlayerObject->obj_get_x_vel() < 0.05 || PlayerObject->obj_get_x_vel() > -0.05) {
 			PlayerObject->obj_set_x_vel(0);
 		}
 
@@ -398,12 +419,12 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_accel_y(0);
 
 		if (PlayerObject->obj_get_y_vel() < 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.2);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.05);
 		}
 		if (PlayerObject->obj_get_y_vel() > 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.2);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.05);
 		}
-		if (PlayerObject->obj_get_y_vel() < 0.2 || PlayerObject->obj_get_y_vel() > -0.2) {
+		if (PlayerObject->obj_get_y_vel() < 0.05 || PlayerObject->obj_get_y_vel() > -0.05) {
 			PlayerObject->obj_set_y_vel(0);
 		}
 	}
