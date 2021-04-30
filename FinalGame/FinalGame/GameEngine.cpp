@@ -60,46 +60,10 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
     
 		//Initialize Player Object Randomly
 		//Initialize matching outline
-		srand((unsigned int)time(NULL));
 		PlayerObject = new GameObject;
 		outline = new GameObject;
-		int pal = rand() % 5;
-		int sz = 400;
-		int rand_w = rand() % (SCREEN_WIDTH - 128) + 64;
-		int rand_h = rand() % (SCREEN_HEIGHT - 128) + 64;
-		double rand_agl = rand() % 180 - 90.0;
 
-		//Switch statement for selecting both character and cooresponding outline
-		switch (pal)
-		{
-		case 0:
-			PlayerObject->obj_init("images/jeff.png", Game_Renderer, 30, 30, sz, sz, 0);
-			outline->obj_init("images/jeff_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
-			break;
-		
-		case 1:
-			PlayerObject->obj_init("images/travis.png", Game_Renderer, 30, 30, sz, sz, 0);
-			outline->obj_init("images/travis_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
-			break;
-
-		case 2:
-			PlayerObject->obj_init("images/diana.png", Game_Renderer, 30, 30, sz, sz, 0);
-			outline->obj_init("images/diana_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
-			break;
-
-		case 3:
-			PlayerObject->obj_init("images/katie.png", Game_Renderer, 30, 30, sz, sz, 0);
-			outline->obj_init("images/katie_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
-			break;
-
-		case 4:
-			PlayerObject->obj_init("images/luna.png", Game_Renderer, 30, 30, sz, sz, 0);
-			outline->obj_init("images/luna_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
-			break;
-		
-		default:
-			break;
-		}
+		RandomizePlayer();
 
 		//Create ParticleEmitter
 		pe = new ParticleEmitter;
@@ -112,7 +76,7 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		
 		txtScore = new TextObject;
 		txtScore->obj_init(textFont, Game_Renderer, SCREEN_WIDTH / 2, 55, textColor, 26);
-		txtScore->obj_update("0", Game_Renderer);
+		txtScore->obj_update("1000", Game_Renderer);
 
 		
 		//Check to see if game running or quit
@@ -151,7 +115,7 @@ void GameEngine::HandleEvents() {
 			//Round reset (restarts current round; does not create new one)
 		case SDLK_r:
 			if (!(onTitle || onEnd || isPause)) {
-				GameEngine::ResetRound();
+				ResetRound(0);
 			}
 			break;
 
@@ -175,7 +139,7 @@ void GameEngine::HandleEvents() {
 		case SDLK_TAB:
 			if (onEnd) {
 				onEnd = false;
-				ResetRound();
+				ResetRound(1);
 				break;
 
 				//Pause game
@@ -207,6 +171,7 @@ void GameEngine::Update() {
 		outline->obj_update();
 
 		totalScore -= 1;
+		if (totalScore < 0) totalScore = 0;
 		
 		//Calculates score and pre-sets new round
 		if (endRound) {
@@ -225,8 +190,6 @@ void GameEngine::Update() {
 			totalScore *= roundScore;
 			std::cout << "round score: " << totalScore << std::endl;
 
-			// Randomize outline position for reset
-			outline->obj_set_rand_pos();
 			endRound = false;
 		}
 		
@@ -268,6 +231,7 @@ void GameEngine::Render() {
 
 		if (onEnd) {
 			end_screen->render_blank(Game_Renderer);
+			end_screen->txt_round_over->obj_render(Game_Renderer);
 			end_screen->press_tab->obj_render(Game_Renderer);
 			end_screen->txt_score_lb->obj_render(Game_Renderer);
 			end_screen->txt_round_score->obj_render(Game_Renderer);
@@ -308,13 +272,14 @@ bool GameEngine::isRunning() {
 }
 
 //Restarts round to original starting position
-void GameEngine::ResetRound() {
+void GameEngine::ResetRound(int newIn) {
 	//Reset back to starting position
 	PlayerObject->obj_set_x_pos(PlayerObject->obj_get_reset_x());
 	PlayerObject->obj_set_y_pos(PlayerObject->obj_get_reset_y());
 
 	std::cout << "Starting X: " << PlayerObject->obj_get_reset_x() << std::endl;
 	std::cout << "Starting Y: " << PlayerObject->obj_get_reset_y() << std::endl;
+
 	//Reset Acceleration
 	PlayerObject->obj_set_accel_x(0);
 	PlayerObject->obj_set_accel_y(0);
@@ -332,49 +297,55 @@ void GameEngine::ResetRound() {
 	outline->obj_set_angle(outline->obj_get_reset_angle());
 	totalScore = 1000;
 
+	if (newIn == 1) {
+		// if new game is started, make new player and outline
+		RandomizePlayer();
+		outline->obj_set_rand_pos();
+	}
+
 }
 
 //Handle key states
 void GameEngine::HandleMovement() {
 
 	// Go right +x direction
-	if (keyState[SDL_SCANCODE_RIGHT] || keyState[SDL_SCANCODE_D]) {
+	if ( keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) {
 		PlayerObject->obj_set_accel_x(PlayerObject->ACCEL);
 	}
 	// Go left -x direction
-	if (keyState[SDL_SCANCODE_LEFT]) {
+	if ( keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) {
 		PlayerObject->obj_set_accel_x(PlayerObject->ACCEL * (-1.0));
 	}
 	// Go up -y direction
-	if (keyState[SDL_SCANCODE_UP]) {
+	if ( keyState[SDL_SCANCODE_W] || keyState[SDL_SCANCODE_UP]) { 
 		PlayerObject->obj_set_accel_y(PlayerObject->ACCEL * (-1.0));
 	}
 	// Go down +y direction
-	if (keyState[SDL_SCANCODE_DOWN]) {
+	if ( keyState[SDL_SCANCODE_S] || keyState[SDL_SCANCODE_DOWN]) { 
 		PlayerObject->obj_set_accel_y(PlayerObject->ACCEL);
 	}
 
 	// If left and right keys are up, decelerate x acceleration
-	if (!keyState[SDL_SCANCODE_LEFT] && !keyState[SDL_SCANCODE_RIGHT]) {
+	if (!keyState[SDL_SCANCODE_LEFT] && !keyState[SDL_SCANCODE_RIGHT] && !keyState[SDL_SCANCODE_A] && !keyState[SDL_SCANCODE_D]) {
 		PlayerObject->obj_set_accel_x(0);
 
 		if (PlayerObject->obj_get_x_vel() < 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.5);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.2);
 		}
 		if (PlayerObject->obj_get_x_vel() > 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.5);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.2);
 		}
 	}
 
 	//If up and down keys are up, decelerate y acceleration
-	if (!keyState[SDL_SCANCODE_UP] && !keyState[SDL_SCANCODE_DOWN]) {
+	if (!keyState[SDL_SCANCODE_UP] && !keyState[SDL_SCANCODE_DOWN] && !keyState[SDL_SCANCODE_W] && !keyState[SDL_SCANCODE_S]) {
 		PlayerObject->obj_set_accel_y(0);
 
 		if (PlayerObject->obj_get_y_vel() < 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.5);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.2);
 		}
 		if (PlayerObject->obj_get_y_vel() > 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.5);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.2);
 		}
 	}
 	
@@ -387,4 +358,47 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_angle(PlayerObject->obj_get_angle() + 5.0);
 	}
 
+}
+
+void GameEngine::RandomizePlayer() {
+
+	srand((unsigned int)time(NULL));
+	
+	int pal = rand() % 5;
+	int sz = 400;
+	int rand_w = rand() % (SCREEN_WIDTH - 128) + 64;
+	int rand_h = rand() % (SCREEN_HEIGHT - 128) + 64;
+	double rand_agl = rand() % 180 - 90.0;
+
+	//Switch statement for selecting both character and cooresponding outline
+	switch (pal)
+	{
+	case 0:
+		PlayerObject->obj_init("images/jeff.png", Game_Renderer, 30, 30, sz, sz, 0);
+		outline->obj_init("images/jeff_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
+		break;
+
+	case 1:
+		PlayerObject->obj_init("images/travis.png", Game_Renderer, 30, 30, sz, sz, 0);
+		outline->obj_init("images/travis_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
+		break;
+
+	case 2:
+		PlayerObject->obj_init("images/diana.png", Game_Renderer, 30, 30, sz, sz, 0);
+		outline->obj_init("images/diana_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
+		break;
+
+	case 3:
+		PlayerObject->obj_init("images/katie.png", Game_Renderer, 30, 30, sz, sz, 0);
+		outline->obj_init("images/katie_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
+		break;
+
+	case 4:
+		PlayerObject->obj_init("images/luna.png", Game_Renderer, 30, 30, sz, sz, 0);
+		outline->obj_init("images/luna_outline.png", Game_Renderer, rand_w, rand_h, sz, sz, rand_agl);
+		break;
+
+	default:
+		break;
+	}
 }

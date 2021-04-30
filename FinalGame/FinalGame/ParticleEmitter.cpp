@@ -27,7 +27,7 @@ void ParticleEmitter::pe_init(const char* graphic, SDL_Renderer* ren, int start_
 		for (int i = 0; i < max_parts; i++) {
 			particles[i].obj_set_state(part_type);
 
-			particles[i].obj_init(graphic, ren, start_x, start_y, width, height);
+			particles[i].obj_init(graphic, ren, start_x, start_y - 10 + rand() % 32, width, height);
 			particles[i].obj_set_x_vel(3.0 - (rand() % 60) / 10.0);
 			particles[i].obj_set_y_vel(0 - (rand() % 60) / 10.0);
 			particles[i].obj_set_lifetime(20 + (rand() % 10));
@@ -39,29 +39,29 @@ void ParticleEmitter::pe_init(const char* graphic, SDL_Renderer* ren, int start_
 
 	if (part_type == 1) {
 		for (int i = 0; i < max_parts; i++){
-			particles[i].obj_set_lifetime(15 + (rand() % 10));
+			particles[i].obj_set_lifetime(20 + (rand() % 10));
 			particles[i].obj_set_state(part_type);
 
 			switch (rand() % 4) {
 			case 0:
 				particles[i].obj_init(graphic, ren, start_x, start_y - 17 + rand() % 34, width, height);
 				particles[i].obj_set_x_vel(5.0 +  (rand() % 50) / 10.0);
-				particles[i].obj_set_y_vel(0);
+				particles[i].obj_set_y_vel(5.0 + (rand() % 50) / 10.0);
 				break;
 			case 1:
 				particles[i].obj_init(graphic, ren, start_x, start_y + 17 - rand() % 34, width, height);
-				particles[i].obj_set_x_vel(-5.0 + (rand() % 50) / -10.0);
-				particles[i].obj_set_y_vel(0);
+				particles[i].obj_set_x_vel(-5.0 + (rand() % 50) / 10.0);
+				particles[i].obj_set_y_vel(-5.0 + (rand() % 50) / 10.0);
 				break;
 			case 2:
 				particles[i].obj_init(graphic, ren, start_x, start_y + 17 - rand() % 34, width, height);
 				particles[i].obj_set_x_vel(4.0 + (rand() % 50) / 10.0);
-				particles[i].obj_set_y_vel(0);
+				particles[i].obj_set_y_vel(-4.0 + (rand() % 50) / 10.0);
 				break;
 			case 3:
 				particles[i].obj_init(graphic, ren, start_x, start_y + 17 - rand() % 34, width, height);
-				particles[i].obj_set_x_vel(-4.0 + (rand() % 50) / -10.0);
-				particles[i].obj_set_y_vel(0);
+				particles[i].obj_set_x_vel(-4.0 + (rand() % 50) / 10.0);
+				particles[i].obj_set_y_vel(4.0 + (rand() % 50) / 10.0);
 				break;
 			}
 		}
