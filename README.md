@@ -17,11 +17,11 @@ The faster and more accurate the fitting is to the line, the higher the score.
 
 
 # Controls
-#### Arrow Keys - Up, Down, Left, Right. (AWSD works as well)
+#### WASD       - Up, Down, Left, Right (or arrow keys)
 #### ESC        - Pause, Title Screen (Paused || End Screen), Quit game (Title Screen)
-#### Q          - Rotate Counter Clockwise
-#### E          - Rotate Clockwise
-#### SPACE      - Place Character
+#### Q          - Rotate Counter Clockwise (or V)
+#### E          - Rotate Clockwise (or B)
+#### SPACE      - Place Character (i.e., end round)
 #### TAB        - Start New Round
 #### 1          - Toggle Sound Off/On
 
