@@ -2,7 +2,8 @@
 
 
 GameEngine::GameEngine(){
-	totalScore = 1000;
+	totalScore = 0;
+	timeScore = 1000;
 	textColor = { 0,0,0 };
 
 	txtScore = nullptr;
@@ -69,14 +70,10 @@ void GameEngine::SDL_init(const char* title, int x, int y, int width, int height
 		Mix_PlayMusic(titleMusic, -1);
 		Mix_VolumeMusic(16);
 
-		//Initialize Player Object
-		PlayerObject = new GameObject;
-    
-		//Initialize Player Object Randomly
-		//Initialize matching outline
+   
+		//Initialize player and matching outline
 		PlayerObject = new GameObject;
 		outline = new GameObject;
-
 		RandomizePlayer();
 
 		//Create ParticleEmitter
@@ -156,6 +153,7 @@ void GameEngine::HandleEvents() {
 			}
 			break;
 
+			//Reset the current round
 		case SDLK_r:
 			if (!(onTitle || isPause)) {
 				ResetRound(0);
@@ -166,7 +164,6 @@ void GameEngine::HandleEvents() {
 
 			//End current round
 		case SDLK_SPACE:
-
 			if (!(onTitle || onEnd || isPause)) {
 				endRound = true;
 			}
@@ -190,7 +187,7 @@ void GameEngine::HandleEvents() {
 				ResetRound(1);
 				break;
 
-				//Pause game
+			//Pause game
 		case SDLK_ESCAPE:
 			if (event.type == SDL_KEYDOWN) {
 				if (!onTitle && !onEnd && !isPause) {
@@ -211,7 +208,6 @@ void GameEngine::HandleEvents() {
 				else {
 					isPause = false;
 				}
-				
 			}
 		default:
 			if (!onTitle)
@@ -231,23 +227,21 @@ void GameEngine::HandleEvents() {
 
 //Update Game
 void GameEngine::Update() {
+
+	//Update particle emitter if it has been initialized
 	if (pe->pe_started) {
 		pe->pe_update();
 	}
-
-	/*if (isSound) {
-		Mix_PlayMusic(titleMusic, -1);
-	}*/
 
 	//Checks to make sure round is in progress
 	if (!(onTitle || onEnd || isPause)) {
 		PlayerObject->obj_update();
 		outline->obj_update();
 
-		totalScore -= 1;
-		if (totalScore < 0) totalScore = 0;
-		
-		//Calculates score and pre-sets new round
+		timeScore -= 1;
+		if (timeScore < 0) timeScore = 0;
+
+		//Calculates score at end of round
 		if (endRound) {
 			onEnd = true;
 
@@ -262,24 +256,19 @@ void GameEngine::Update() {
 				pe->pe_init("./images/diana.png", Game_Renderer, PlayerObject->obj_get_x_pos(), PlayerObject->obj_get_y_pos(), 400, 400, 0);	//not collided
 			}
 
-			totalScore *= roundScore;
+			totalScore = timeScore * roundScore;
 			std::cout << "round score: " << totalScore << std::endl;
 
 			endRound = false;
-		}
-		else {
+
+			//Updates score for end screen
 			std::string s = std::to_string(totalScore);
 			char const* charScore = s.c_str();
-			txtScore->obj_update(charScore, Game_Renderer);
+			end_screen->txt_round_score->obj_update(charScore, Game_Renderer);
 		}
-		
-		//Displays score to screen
-		std::string s = std::to_string(totalScore);
+		std::string s = std::to_string(timeScore);	
 		char const* charScore = s.c_str();
-		
-		end_screen->txt_round_score->obj_update(charScore, Game_Renderer);
-		
-		
+		txtScore->obj_update(charScore, Game_Renderer);
 	}
 }
 
@@ -377,10 +366,12 @@ void GameEngine::ResetRound(int newIn) {
 	//Reset Angle
 	PlayerObject->obj_set_angle(0);
 
-	totalScore = 1000;
+	//Reset score and timer
+	totalScore = 0;
+	timeScore = 1000;
 
 	if (newIn == 1) {
-		// if new game is started, make new player and outline
+		//If new game is started, make new player and outline
 		RandomizePlayer();
 		outline->obj_set_rand_pos();
 		outline->obj_set_x_pos(outline->obj_get_reset_x());
@@ -415,12 +406,12 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_accel_x(0);
 
 		if (PlayerObject->obj_get_x_vel() < 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.1);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() + 0.2);
 		}
 		if (PlayerObject->obj_get_x_vel() > 0) {
-			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.1);
+			PlayerObject->obj_set_x_vel(PlayerObject->obj_get_x_vel() - 0.2);
 		}
-		if (PlayerObject->obj_get_x_vel() < 0.1 || PlayerObject->obj_get_x_vel() > -0.1) {
+		if (PlayerObject->obj_get_x_vel() < 0.05 || PlayerObject->obj_get_x_vel() > -0.05) {
 			PlayerObject->obj_set_x_vel(0);
 		}
 
@@ -431,12 +422,12 @@ void GameEngine::HandleMovement() {
 		PlayerObject->obj_set_accel_y(0);
 
 		if (PlayerObject->obj_get_y_vel() < 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.1);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() + 0.2);
 		}
 		if (PlayerObject->obj_get_y_vel() > 0) {
-			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.1);
+			PlayerObject->obj_set_y_vel(PlayerObject->obj_get_y_vel() - 0.2);
 		}
-		if (PlayerObject->obj_get_y_vel() < 0.1 || PlayerObject->obj_get_y_vel() > -0.1) {
+		if (PlayerObject->obj_get_y_vel() < 0.05 || PlayerObject->obj_get_y_vel() > -0.05) {
 			PlayerObject->obj_set_y_vel(0);
 		}
 	}

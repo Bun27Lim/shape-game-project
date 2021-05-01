@@ -44,8 +44,8 @@ public:
 	void obj_set_rand_pos();
 
 	static const int ACCEL = 2;
-	static const int MAX_VEL = 10;
-	static const int MAX_ROT = 20;
+	static const int MAX_VEL = 10; 
+	static const int MAX_ROT = 10;
 
 protected:
 	//Sprite* obj_sprite;

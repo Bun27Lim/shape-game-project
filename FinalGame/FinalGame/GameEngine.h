@@ -57,6 +57,7 @@ class GameEngine {
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
 
 		int totalScore;
+		int timeScore;
 		bool Running;
 		bool endRound;
 		bool onTitle;
